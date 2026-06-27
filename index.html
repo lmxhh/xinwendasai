@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.min.js"></script>
@@ -96,13 +96,27 @@
         .navbar-links a {
             color: var(--ink); text-decoration: none;
             font-size: 13px; font-weight: 500; letter-spacing: 1px;
-            transition: all 0.3s; position: relative;
+            transition: all 0.3s cubic-bezier(0.4,0,0.2,1); position: relative;
             padding: 8px 16px; border-radius: 8px;
             background: rgba(255,255,255,0.8);
             box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+        .navbar-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 2px;
+            background: var(--forest);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
         }
         .navbar-links a:hover {
             background: var(--forest); color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(27,122,66,0.3);
+        }
+        .navbar-links a:hover::after {
+            transform: scaleX(1);
         }
         .navbar.scrolled .navbar-links a {
             color: var(--ink); background: rgba(255,255,255,0.9);
@@ -131,24 +145,24 @@
             content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 300px;
             background: linear-gradient(to top, var(--paper), var(--forest-lightest), transparent);
         }
-        .hero-inner {
+.hero-inner {
             position: relative; z-index: 2;
             max-width: 1400px; margin: 0 auto; width: 100%;
-            display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px;
-            align-items: center; padding: 30px 32px 140px;
+            display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px;
+            align-items: center; padding: 40px 32px 60px;
             min-height: calc(100vh - 60px);
         }
         .hero-text h1 {
             font-family: var(--font-serif); font-size: 72px; font-weight: 700;
-            color: #fff; line-height: 1.1; letter-spacing: 8px; margin-bottom: 28px;
+            color: #fff; line-height: 1.1; letter-spacing: 8px; margin-bottom: 16px;
         }
         .hero-text .subtitle {
             font-size: 22px; color: rgba(255,255,255,0.8);
-            letter-spacing: 6px; margin-bottom: 48px; font-weight: 300;
+            letter-spacing: 6px; margin-bottom: 24px; font-weight: 300;
         }
         .hero-text .intro {
-            font-size: 16px; line-height: 2.4;
-            color: rgba(255,255,255,0.7); max-width: 560px;
+            font-size: 16px; line-height: 1.9;
+            color: rgba(255,255,255,0.75); max-width: 520px;
         }
         .hero-map-wrap { position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: auto; }
         .interactive-map {
@@ -160,8 +174,8 @@
         }
         .interactive-map svg {
             width: 100%; height: auto;
-            min-width: 720px; min-height: 720px;
-            max-width: 800px; max-height: 800px;
+            min-width: 620px; min-height: 620px;
+            max-width: 720px; max-height: 720px;
         }
         .interactive-map .map-city {
             fill: #f5f0e6;
@@ -170,11 +184,28 @@
             stroke-linejoin: round;
             cursor: pointer;
             transition: fill 0.3s ease, stroke-width 0.3s ease;
+            opacity: 0.9;
         }
         .interactive-map .map-city:hover {
             fill: rgba(45,138,87,0.6);
             stroke: #1b7a42;
             stroke-width: 2.5;
+            opacity: 1;
+        }
+        .interactive-map .map-city.highlighted {
+            fill: rgba(45,138,87,0.8);
+            filter: drop-shadow(0 0 15px rgba(45,138,87,0.6));
+        }
+        .map-pulse {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--forest);
+            animation: pulseRing 2s ease-out infinite;
+            pointer-events: none;
+        }
+        @keyframes pulseRing {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(2.5); opacity: 0; }
         }
         .interactive-map .city-label {
             fill: #1b7a42;
@@ -234,8 +265,29 @@
             padding: 36px 28px; text-align: center;
             box-shadow: 0 4px 20px rgba(27,122,66,0.1); border: 1px solid rgba(27,122,66,0.15);
             transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            overflow: hidden;
         }
-        .stat-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(27,122,66,0.2); border-color: var(--forest-faint); }
+        .stat-card::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(27,122,66,0.05), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s ease;
+            opacity: 0;
+        }
+        .stat-card:hover::before {
+            animation: shimmer 0.6s ease;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); opacity: 1; }
+            100% { transform: translateX(100%) rotate(45deg); opacity: 0; }
+        }
+        .stat-card:hover { 
+            transform: translateY(-8px) scale(1.02); 
+            box-shadow: 0 16px 50px rgba(27,122,66,0.25); 
+            border-color: var(--forest-faint); 
+        }
         .stat-icon { font-size: 32px; margin-bottom: 16px; display: block; color: var(--forest); }
         .stat-value { font-family: var(--font-serif); font-size: 40px; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 10px; }
         .stat-label { font-size: 13px; color: var(--ink-muted); line-height: 1.5; font-weight: 400; }
@@ -244,6 +296,8 @@
             background: rgba(255,255,255,0.9); border-radius: var(--radius-lg);
             padding: 40px; margin-bottom: 48px;
             box-shadow: 0 4px 24px rgba(27,122,66,0.12); border: 1px solid rgba(27,122,66,0.15);
+            opacity: 0;
+            transform: scale(0.95) translateY(20px);
         }
         .chart-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; }
         .chart-title { font-family: var(--font-serif); font-size: 18px; font-weight: 600; color: var(--ink); }
@@ -252,7 +306,16 @@
         .prose { max-width: 720px; margin: 0 auto 48px; font-size: 16px; line-height: 2; color: var(--ink-light); }
         .prose p { margin-bottom: 24px; }
         .prose .lead { font-size: 18px; color: var(--ink); line-height: 1.9; font-weight: 400; }
-        .prose .highlight { color: var(--forest); font-weight: 600; background: rgba(27,122,66,0.1); padding: 2px 6px; border-radius: 4px; }
+        .prose .highlight { 
+            color: var(--forest); font-weight: 600; 
+            background: rgba(27,122,66,0.1); 
+            padding: 2px 6px; border-radius: 4px;
+            animation: highlightPulse 3s ease-in-out infinite;
+        }
+        @keyframes highlightPulse {
+            0%, 100% { background: rgba(27,122,66,0.1); }
+            50% { background: rgba(27,122,66,0.15); }
+        }
 
         .timeline { position: relative; padding-left: 48px; max-width: 800px; margin: 0 auto; }
         .timeline::before { content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 2px; background: rgba(27,122,66,0.2); }
@@ -262,7 +325,26 @@
         .timeline-desc { font-size: 15px; color: var(--ink-light); line-height: 1.8; padding: 16px 20px; background: rgba(255,255,255,0.85); border-radius: var(--radius-sm); border-left: 3px solid var(--forest); }
 
         .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 48px; }
-        .status-card { background: rgba(255,255,255,0.9); border-radius: var(--radius); padding: 32px; box-shadow: 0 4px 20px rgba(27,122,66,0.1); border: 1px solid rgba(27,122,66,0.15); }
+        .status-card { 
+            background: rgba(255,255,255,0.9); border-radius: var(--radius); padding: 32px; 
+            box-shadow: 0 4px 20px rgba(27,122,66,0.1); border: 1px solid rgba(27,122,66,0.15);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+            position: relative;
+            overflow: hidden;
+        }
+        .status-card::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s ease;
+        }
+        .status-card:hover::before {
+            left: 150%;
+        }
+        .status-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(27,122,66,0.15);
+        }
         .status-card.success { border-top: 4px solid var(--forest); }
         .status-card.challenge { border-top: 4px solid var(--earth); }
         .status-card h4 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
@@ -381,6 +463,16 @@
             background-repeat: repeat; background-size: 256px 256px;
         }
 
+        #particleCanvas {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9997;
+            opacity: 0.4;
+        }
+
+        .parallax-layer {
+            position: absolute; pointer-events: none;
+            will-change: transform;
+        }
+
         .reveal-text { opacity: 0; visibility: hidden; transform: translateY(30px); }
 
         @media (max-width: 900px) {
@@ -413,6 +505,7 @@
 </head>
 <body>
     <div class="grain"></div>
+    <canvas id="particleCanvas"></canvas>
     <div id="progressBar"></div>
 
     <nav class="navbar" id="navbar">
@@ -734,6 +827,116 @@
     </footer>
 
     <script>
+        function initParticleSystem() {
+            const canvas = document.getElementById('particleCanvas');
+            const ctx = canvas.getContext('2d');
+            let animationId;
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height + Math.random() * 100;
+                    this.size = Math.random() * 3 + 1;
+                    this.speedY = Math.random() * 1.5 + 0.5;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.opacity = Math.random() * 0.5 + 0.1;
+                    this.pulse = Math.random() * Math.PI * 2;
+                    this.pulseSpeed = Math.random() * 0.02 + 0.01;
+                    this.color = Math.random() > 0.7 ? '#74c69d' : '#a8e6c6';
+                }
+
+                update() {
+                    this.y -= this.speedY;
+                    this.x += this.speedX;
+                    this.pulse += this.pulseSpeed;
+                    this.size = Math.max(0.5, this.size + Math.sin(this.pulse) * 0.05);
+
+                    if (this.y < -50) this.reset();
+                    if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.opacity * (0.7 + Math.sin(this.pulse) * 0.3);
+                    ctx.fill();
+
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size * 2, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.globalAlpha = this.opacity * 0.3;
+                    ctx.fill();
+
+                    ctx.globalAlpha = 1;
+                }
+            }
+
+            function init() {
+                resize();
+                particles = [];
+                const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle());
+                }
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                animationId = requestAnimationFrame(animate);
+            }
+
+            window.addEventListener('resize', resize);
+            init();
+            animate();
+
+            return { init, animate };
+        }
+
+        function initParallax() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            const sections = document.querySelectorAll('section');
+            sections.forEach((section, index) => {
+                if (index === 0) return;
+
+                const bgLayer = document.createElement('div');
+                bgLayer.className = 'parallax-layer';
+                bgLayer.style.background = `radial-gradient(ellipse 60% 40% at ${20 + Math.random() * 60}% ${20 + Math.random() * 60}%, rgba(74,158,109,0.08), transparent 70%)`;
+                bgLayer.style.width = '150%';
+                bgLayer.style.height = '150%';
+                bgLayer.style.left = '-25%';
+                bgLayer.style.top = '-25%';
+                bgLayer.style.zIndex = '0';
+                section.appendChild(bgLayer);
+
+                gsap.to(bgLayer, {
+                    y: (index % 2 === 0 ? 100 : -100),
+                    x: (index % 3 === 0 ? 50 : index % 3 === 1 ? -50 : 0),
+                    scrollTrigger: {
+                        trigger: section,
+                        start: 'top bottom',
+                        end: 'bottom top',
+                        scrub: 1.5
+                    }
+                });
+            });
+        }
+
         function initProgressBar() {
             const bar = document.getElementById('progressBar');
             window.addEventListener('scroll', () => {
@@ -942,14 +1145,28 @@
 
             yearData.forEach((item, index) => {
                 const chart = echarts.init(document.getElementById('yearChart' + index));
+                const tooltipData = [item.production + ' 万吨', item.yield + ' 公斤/亩', item.area + ' 千公顷', item.highStandard + ' 万亩'];
                 chart.setOption({
                     backgroundColor:'transparent',
-                    tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:12}, padding:[8,12], borderRadius:6, borderColor:'transparent', borderWidth:1 },
+                    tooltip: { 
+                        trigger:'axis', 
+                        backgroundColor:'rgba(27,67,50,0.95)', 
+                        textStyle:{color:'#fff',fontSize:12}, 
+                        padding:[8,12], 
+                        borderRadius:6, 
+                        borderColor:'transparent', 
+                        borderWidth:1,
+                        formatter: function(params) {
+                            const dataIndex = params[0].dataIndex;
+                            const names = ['粮食总产', '单产', '播种面积', '高标准农田'];
+                            return names[dataIndex] + '<br/>' + tooltipData[dataIndex];
+                        }
+                    },
                     grid: { left:'4%', right:'4%', bottom:'6%', top:'10%', containLabel:true },
                     xAxis: { type:'category', data:['粮食总产','单产','播种面积','高标准农田'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:11}, axisTick:{show:false} },
-                    yAxis: { type:'value', axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}} },
+                    yAxis: { type:'value', axisLine:{show:false}, axisLabel:{show:false}, splitLine:{show:false} },
                     series: [{
-                        type:'bar', data:[item.production/60, item.yield, item.area/100, item.highStandard/80],
+                        type:'bar', data:[1, 1, 1, 1],
                         itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2d8a57'},{offset:1,color:'#5cc48e'}]), borderRadius:[4,4,0,0]}
                     }]
                 });
@@ -1151,15 +1368,44 @@
             const paths = svg.querySelectorAll('path.map-city');
             const ns = 'http://www.w3.org/2000/svg';
 
+            gsap.from(paths, {
+                opacity: 0,
+                scale: 0.8,
+                duration: 0.8,
+                stagger: 0.03,
+                ease: 'back.out(1.7)',
+                delay: 0.5
+            });
+
             paths.forEach(path => {
                 const id = path.getAttribute('id');
                 const city = cityData[id];
                 if (!city) return;
 
-                // 悬停：tooltip + 加粗描边
                 path.addEventListener('mouseenter', function(e) {
                     this.style.strokeWidth = '3';
                     this.style.stroke = '#1b7a42';
+                    
+                    const rect = this.getBoundingClientRect();
+                    const mapRect = mapWrap.getBoundingClientRect();
+                    const centerX = rect.left - mapRect.left + rect.width / 2;
+                    const centerY = rect.top - mapRect.top + rect.height / 2;
+
+                    const pulse = document.createElement('div');
+                    pulse.className = 'map-pulse';
+                    pulse.style.left = centerX + 'px';
+                    pulse.style.top = centerY + 'px';
+                    pulse.style.width = '60px';
+                    pulse.style.height = '60px';
+                    mapWrap.appendChild(pulse);
+                    this.pulseElement = pulse;
+
+                    gsap.to(this, {
+                        scale: 1.02,
+                        duration: 0.3,
+                        transformOrigin: 'center'
+                    });
+
                     tooltip.innerHTML = '<h4>' + city.name + '</h4>'
                         + '<p><span class="highlight">粮食产量：' + city.production + '万吨</span></p>'
                         + '<p>十年增长：' + city.growth + '</p>'
@@ -1176,11 +1422,29 @@
                 path.addEventListener('mouseleave', function() {
                     this.style.strokeWidth = '';
                     this.style.stroke = '';
+                    
+                    if (this.pulseElement) {
+                        this.pulseElement.remove();
+                        this.pulseElement = null;
+                    }
+
+                    gsap.to(this, {
+                        scale: 1,
+                        duration: 0.3,
+                        transformOrigin: 'center'
+                    });
+
                     tooltip.classList.remove('show');
                 });
 
-                // 点击：滚动到各地市十年产能变化区域并显示对应城市折线图
                 path.addEventListener('click', function() {
+                    gsap.to(this, {
+                        duration: 0.5,
+                        scale: 0.95,
+                        yoyo: true,
+                        repeat: 1
+                    });
+
                     const cityNames = ['郑州', '开封', '洛阳', '平顶山', '安阳', '鹤壁', '新乡', '焦作', '濮阳', '许昌', '漯河', '三门峡', '南阳', '商丘', '信阳', '周口', '驻马店', '济源'];
                     const cityName = city.name.replace('市', '');
                     const cityIndex = cityNames.indexOf(cityName);
@@ -1195,6 +1459,20 @@
                     }
                 });
             });
+        }
+
+        function typeWriter(element, text, speed) {
+            speed = speed || 80;
+            var i = 0;
+            element.textContent = '';
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
         }
 
         function initAnimations() {
@@ -1230,10 +1508,11 @@
             });
 
             document.querySelectorAll('.stat-card').forEach((card, index) => {
-                gsap.set(card, { opacity: 0, scale: 0.9 });
+                gsap.set(card, { opacity: 0, scale: 0.9, y: 20 });
                 gsap.to(card, {
                     opacity: 1,
                     scale: 1,
+                    y: 0,
                     duration: 0.6,
                     ease: 'power2.out',
                     delay: index * 0.15,
@@ -1245,7 +1524,80 @@
                 });
             });
 
-            const counterSection = document.querySelector('.stats-section');
+            document.querySelectorAll('.chart-wrap').forEach((chart, index) => {
+                gsap.to(chart, {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: chart,
+                        start: 'top 80%',
+                        once: true
+                    }
+                });
+            });
+
+            document.querySelectorAll('.timeline-item').forEach((item, index) => {
+                gsap.set(item, { opacity: 0, x: -30 });
+                gsap.to(item, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: item,
+                        start: 'top 85%',
+                        once: true
+                    }
+                });
+            });
+
+            document.querySelectorAll('.status-card').forEach((card, index) => {
+                gsap.set(card, { opacity: 0, y: 30 });
+                gsap.to(card, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.7,
+                    ease: 'power2.out',
+                    delay: index * 0.2,
+                    scrollTrigger: {
+                        trigger: card.parentElement,
+                        start: 'top 80%',
+                        once: true
+                    }
+                });
+            });
+
+            const heroText = document.querySelector('.hero-text h1');
+            gsap.from(heroText, {
+                opacity: 0,
+                y: 50,
+                duration: 1.2,
+                ease: 'power3.out',
+                delay: 0.3
+            });
+
+            const heroSubtitle = document.querySelector('.hero-text .subtitle');
+            gsap.from(heroSubtitle, {
+                opacity: 0,
+                y: 30,
+                duration: 1,
+                ease: 'power2.out',
+                delay: 0.6
+            });
+
+            const heroIntro = document.querySelector('.hero-text .intro');
+            gsap.from(heroIntro, {
+                opacity: 0,
+                y: 20,
+                duration: 1,
+                ease: 'power2.out',
+                delay: 0.8
+            });
+
+            const counterSection = document.querySelector('.stats-grid');
             if (counterSection) {
                 ScrollTrigger.create({
                     trigger: counterSection,
@@ -1254,14 +1606,47 @@
                     onEnter: animateCounters
                 });
             }
+
+            const quoteBlock = document.querySelector('.quote-block');
+            if (quoteBlock) {
+                gsap.set(quoteBlock, { opacity: 0, scale: 0.9 });
+                gsap.to(quoteBlock, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: quoteBlock,
+                        start: 'top 75%',
+                        once: true
+                    }
+                });
+            }
+
+            const epilogue = document.querySelector('.epilogue');
+            if (epilogue) {
+                gsap.set(epilogue, { opacity: 0, y: 30 });
+                gsap.to(epilogue, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 1.2,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: epilogue,
+                        start: 'top 70%',
+                        once: true
+                    }
+                });
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            initParticleSystem();
+            initParallax();
             initCharts();
             initCarousel();
             initCityCarousel();
             initInteractiveMap();
             initAnimations();
-            setTimeout(animateCounters, 2000);
         });
     </script>
