@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数说十年中原粮仓：方寸耕地里的产能蜕变</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/countup.js@2.8.0/dist/countUp.min.js"></script>
+    <style>
+        :root {
+            --ink: #1a1a1a;
+            --ink-light: #2d4a3e;
+            --ink-muted: #4a6a58;
+            --ink-faint: #6a8a78;
+            --paper: #e6f5eb;
+            --paper-warm: #dcf0e5;
+            --card: #ffffff;
+            --forest: #1b7a42;
+            --forest-light: #2d8a57;
+            --forest-soft: #4a9e6d;
+            --forest-faint: #74c69d;
+            --forest-pale: #a8e6c6;
+            --forest-lightest: #c8f0db;
+            --earth: #bc6c25;
+            --earth-light: #dda15e;
+            --earth-faint: #e9c46a;
+            --danger: #c0392b;
+            --border: #a8e6c6;
+            --border-light: #c8f0db;
+            --shadow-sm: 0 1px 3px rgba(27,122,66,0.1);
+            --shadow: 0 4px 20px rgba(27,122,66,0.15);
+            --shadow-lg: 0 12px 40px rgba(27,122,66,0.2);
+            --radius-sm: 8px;
+            --radius: 16px;
+            --radius-lg: 24px;
+            --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'SimSun', serif;
+            --font-sans: 'Noto Sans SC', 'Source Han Sans SC', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+            --emerald: #22a668;
+            --emerald-light: #34b379;
+            --emerald-soft: #4cc48e;
+            --emerald-bright: #74d9aa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.8;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        #progressBar {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: var(--forest);
+            z-index: 10000;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .navbar {
+            position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;
+            padding: 0; transition: all 0.4s ease;
+        }
+        .navbar.scrolled {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px) saturate(180%);
+            box-shadow: 0 2px 20px rgba(27,122,66,0.15);
+            border-bottom: 1px solid rgba(27,122,66,0.1);
+        }
+        .navbar.scrolled .navbar-logo, .navbar.scrolled .navbar-links a { color: var(--ink); }
+        .navbar-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 16px 32px;
+        }
+        .navbar-logo {
+            font-family: var(--font-serif); font-size: 18px; font-weight: 600;
+            letter-spacing: 2px; color: var(--ink); transition: color 0.3s;
+            padding: 8px 16px; border-radius: 8px;
+            background: rgba(255,255,255,0.85); backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .navbar.scrolled .navbar-logo {
+            background: rgba(255,255,255,0.9); color: var(--ink);
+        }
+        .navbar-logo span { color: var(--forest); font-weight: 400; }
+        .navbar-links { display: flex; gap: 24px; list-style: none; }
+        .navbar-links a {
+            color: var(--ink); text-decoration: none;
+            font-size: 13px; font-weight: 500; letter-spacing: 1px;
+            transition: all 0.3s; position: relative;
+            padding: 8px 16px; border-radius: 8px;
+            background: rgba(255,255,255,0.8);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .navbar-links a:hover {
+            background: var(--forest); color: #fff;
+        }
+        .navbar.scrolled .navbar-links a {
+            color: var(--ink); background: rgba(255,255,255,0.9);
+        }
+        .navbar.scrolled .navbar-links a:hover {
+            background: var(--forest); color: #fff;
+        }
+        .navbar-links a::after {
+            display: none;
+        }
+        .navbar-toggle { display: none; font-size: 22px; cursor: pointer; }
+
+        .hero {
+            position: relative; min-height: 100vh;
+            display: flex; align-items: center;
+            background: linear-gradient(180deg, var(--forest) 0%, var(--forest-light) 60%, var(--emerald-light) 100%);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 20% 50%, rgba(74,158,109,0.3) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 80% at 80% 20%, rgba(116,198,157,0.2) 0%, transparent 50%);
+        }
+        .hero::after {
+            content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 300px;
+            background: linear-gradient(to top, var(--paper), var(--forest-lightest), transparent);
+        }
+        .hero-inner {
+            position: relative; z-index: 2;
+            max-width: 1400px; margin: 0 auto; width: 100%;
+            display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 20px;
+            align-items: center; padding: 30px 32px 140px;
+            min-height: calc(100vh - 60px);
+        }
+        .hero-text h1 {
+            font-family: var(--font-serif); font-size: 72px; font-weight: 700;
+            color: #fff; line-height: 1.1; letter-spacing: 8px; margin-bottom: 28px;
+        }
+        .hero-text .subtitle {
+            font-size: 22px; color: rgba(255,255,255,0.8);
+            letter-spacing: 6px; margin-bottom: 48px; font-weight: 300;
+        }
+        .hero-text .intro {
+            font-size: 16px; line-height: 2.4;
+            color: rgba(255,255,255,0.7); max-width: 560px;
+        }
+        .hero-map-wrap { position: relative; display: flex; justify-content: center; align-items: center; width: 100%; height: auto; }
+        .interactive-map {
+            position: relative; width: 100%; height: auto;
+            max-width: none; max-height: none;
+            filter: drop-shadow(0 15px 40px rgba(0,0,0,0.25));
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0.95;
+        }
+        .interactive-map svg {
+            width: 100%; height: auto;
+            min-width: 720px; min-height: 720px;
+            max-width: 800px; max-height: 800px;
+        }
+        .interactive-map .map-city {
+            fill: #f5f0e6;
+            stroke: #2d8a57;
+            stroke-width: 1.5;
+            stroke-linejoin: round;
+            cursor: pointer;
+            transition: fill 0.3s ease, stroke-width 0.3s ease;
+        }
+        .interactive-map .map-city:hover {
+            fill: rgba(45,138,87,0.6);
+            stroke: #1b7a42;
+            stroke-width: 2.5;
+        }
+        .interactive-map .city-label {
+            fill: #1b7a42;
+            font-size: 15px;
+            font-family: "Noto Serif SC", "Source Han Serif SC", serif;
+            text-anchor: middle;
+            pointer-events: none;
+            font-weight: 600;
+        }
+        .interactive-map .city-dot {
+            fill: #2d8a57;
+            pointer-events: none;
+        }
+        .map-tooltip {
+            position: absolute;
+            background: rgba(255,255,255,0.98);
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 100;
+            min-width: 200px;
+            border: 1px solid rgba(27,122,66,0.15);
+        }
+        .map-tooltip.show { opacity: 1; }
+        .map-tooltip h4 {
+            font-family: var(--font-serif); font-size: 16px; font-weight: 600;
+            color: var(--ink); margin-bottom: 8px;
+        }
+        .map-tooltip p {
+            font-size: 13px; color: var(--ink-muted); line-height: 1.8;
+            margin: 4px 0;
+        }
+        .map-tooltip .highlight {
+            color: var(--forest); font-weight: 600;
+        }
+        .scroll-hint {
+            position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+            z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+        .scroll-hint span { font-size: 11px; color: rgba(255,255,255,0.8); letter-spacing: 2px; text-transform: uppercase; font-weight: 500; }
+        .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+        @keyframes scrollPulse { 0%, 100% { opacity: 0.3; transform: scaleY(0.6); } 50% { opacity: 1; transform: scaleY(1); } }
+
+        section { padding: 120px 0; position: relative; background: linear-gradient(180deg, var(--paper) 0%, var(--forest-lightest) 60%, var(--paper-warm) 100%); }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 32px; }
+
+        .section-label { font-size: 12px; font-weight: 600; letter-spacing: 3px; color: var(--forest); text-transform: uppercase; margin-bottom: 16px; }
+        .section-title { font-family: var(--font-serif); font-size: 36px; font-weight: 600; color: var(--ink); margin-bottom: 60px; line-height: 1.3; }
+        .section-title em { font-style: normal; color: var(--forest); }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 80px; }
+        .stat-card {
+            background: rgba(255,255,255,0.85); border-radius: var(--radius);
+            padding: 36px 28px; text-align: center;
+            box-shadow: 0 4px 20px rgba(27,122,66,0.1); border: 1px solid rgba(27,122,66,0.15);
+            transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .stat-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(27,122,66,0.2); border-color: var(--forest-faint); }
+        .stat-icon { font-size: 32px; margin-bottom: 16px; display: block; color: var(--forest); }
+        .stat-value { font-family: var(--font-serif); font-size: 40px; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 10px; }
+        .stat-label { font-size: 13px; color: var(--ink-muted); line-height: 1.5; font-weight: 400; }
+
+        .chart-wrap {
+            background: rgba(255,255,255,0.9); border-radius: var(--radius-lg);
+            padding: 40px; margin-bottom: 48px;
+            box-shadow: 0 4px 24px rgba(27,122,66,0.12); border: 1px solid rgba(27,122,66,0.15);
+        }
+        .chart-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 28px; }
+        .chart-title { font-family: var(--font-serif); font-size: 18px; font-weight: 600; color: var(--ink); }
+        .chart-note { font-size: 12px; color: var(--ink-muted); }
+
+        .prose { max-width: 720px; margin: 0 auto 48px; font-size: 16px; line-height: 2; color: var(--ink-light); }
+        .prose p { margin-bottom: 24px; }
+        .prose .lead { font-size: 18px; color: var(--ink); line-height: 1.9; font-weight: 400; }
+        .prose .highlight { color: var(--forest); font-weight: 600; background: rgba(27,122,66,0.1); padding: 2px 6px; border-radius: 4px; }
+
+        .timeline { position: relative; padding-left: 48px; max-width: 800px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; left: 11px; top: 8px; bottom: 8px; width: 2px; background: rgba(27,122,66,0.2); }
+        .timeline-item { position: relative; margin-bottom: 40px; }
+        .timeline-item::before { content: ''; position: absolute; left: -42px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--forest); border: 2px solid var(--forest-pale); box-shadow: 0 0 0 4px rgba(27,122,66,0.15); }
+        .timeline-year { font-family: var(--font-serif); font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+        .timeline-desc { font-size: 15px; color: var(--ink-light); line-height: 1.8; padding: 16px 20px; background: rgba(255,255,255,0.85); border-radius: var(--radius-sm); border-left: 3px solid var(--forest); }
+
+        .status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 48px; }
+        .status-card { background: rgba(255,255,255,0.9); border-radius: var(--radius); padding: 32px; box-shadow: 0 4px 20px rgba(27,122,66,0.1); border: 1px solid rgba(27,122,66,0.15); }
+        .status-card.success { border-top: 4px solid var(--forest); }
+        .status-card.challenge { border-top: 4px solid var(--earth); }
+        .status-card h4 { font-family: var(--font-serif); font-size: 18px; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .status-card.success h4 { color: var(--ink); }
+        .status-card.challenge h4 { color: var(--earth); }
+        .status-card ul { list-style: none; }
+        .status-card li { padding: 12px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; line-height: 1.8; color: var(--ink-light); }
+        .status-card li:last-child { border-bottom: none; }
+        .status-card li strong { color: var(--ink); font-weight: 600; display: block; margin-bottom: 2px; }
+
+        .quote-block {
+            max-width: 720px; margin: 48px auto; padding: 36px 40px;
+            background: rgba(27,122,66,0.08); color: var(--ink); border-radius: var(--radius-lg); position: relative;
+            border: 1px solid var(--border);
+        }
+        .quote-block::before { content: '"'; position: absolute; top: 16px; left: 24px; font-family: var(--font-serif); font-size: 72px; color: rgba(27,122,66,0.1); line-height: 1; }
+        .quote-block p { font-family: var(--font-serif); font-size: 18px; line-height: 2; position: relative; z-index: 1; }
+
+        .epilogue { max-width: 720px; margin: 60px auto 0; text-align: center; }
+        .epilogue p { font-family: var(--font-serif); font-size: 20px; color: var(--ink); line-height: 2.2; font-weight: 500; }
+
+        .carousel-section { margin-bottom: 48px; }
+        .carousel-wrapper {
+            position: relative; overflow: hidden;
+            border-radius: var(--radius-lg);
+            background: rgba(255,255,255,0.9);
+            box-shadow: 0 4px 24px rgba(27,122,66,0.12);
+            border: 1px solid rgba(27,122,66,0.15);
+        }
+        .carousel-track {
+            display: flex; transition: transform 0.5s ease;
+            padding: 20px 0;
+        }
+        .carousel-slide {
+            flex-shrink: 0; width: calc(100% - 80px);
+            margin: 0 40px; padding: 30px;
+            display: flex; flex-direction: column;
+        }
+        .carousel-year-badge {
+            align-self: flex-end;
+            font-family: var(--font-serif); font-size: 28px; font-weight: 700;
+            color: rgba(27,122,66,0.1);
+        }
+        .carousel-chart { flex: 1; min-height: 300px; }
+        .carousel-stats {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+            margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(27,122,66,0.1);
+        }
+        .carousel-stat-item { text-align: center; }
+        .carousel-stat-item .value { font-family: var(--font-serif); font-size: 24px; font-weight: 700; color: var(--ink); }
+        .carousel-stat-item .label { font-size: 11px; color: var(--ink-muted); margin-top: 4px; }
+        .carousel-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(27,122,66,0.08);
+            border: 1px solid rgba(27,122,66,0.1);
+        }
+        .carousel-card-title {
+            font-family: var(--font-serif); font-size: 20px; font-weight: 600;
+            color: var(--ink); text-align: center; margin-bottom: 16px;
+            padding-bottom: 12px; border-bottom: 1px solid rgba(27,122,66,0.1);
+        }
+        .carousel-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.9); border: 1px solid rgba(27,122,66,0.2);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            font-size: 18px; color: var(--ink);
+        }
+        .carousel-nav:hover { background: var(--forest); color: #fff; border-color: var(--forest); }
+        .carousel-nav.prev { left: 16px; }
+        .carousel-nav.next { right: 16px; }
+        #cityCarousel .carousel-track {
+            display: flex; transition: transform 0.5s ease;
+            padding: 20px 0;
+        }
+        #cityCarousel .carousel-slide {
+            flex-shrink: 0; width: calc(100% - 80px);
+            margin: 0 40px; padding: 24px;
+            display: flex; flex-direction: column;
+        }
+        .carousel-indicators {
+            display: flex; justify-content: center; gap: 8px;
+            padding: 16px;
+        }
+        .carousel-indicator {
+            width: 8px; height: 8px; border-radius: 50%;
+            background: var(--border); cursor: pointer;
+            transition: all 0.3s;
+        }
+        .carousel-indicator.active { background: var(--forest); width: 24px; border-radius: 4px; }
+
+        footer {
+            background: var(--forest); color: rgba(255,255,255,0.7);
+            padding: 80px 32px 60px; text-align: center;
+        }
+        .footer-inner { max-width: 600px; margin: 0 auto; }
+        .footer-title { font-family: var(--font-serif); font-size: 20px; color: #fff; margin-bottom: 32px; letter-spacing: 2px; }
+        .footer-divider { width: 40px; height: 1px; background: var(--earth-light); margin: 0 auto 32px; }
+        .footer-text { font-size: 13px; line-height: 2.2; color: rgba(255,255,255,0.5); }
+        .footer-text strong { color: rgba(255,255,255,0.8); font-weight: 500; }
+
+        section { padding: 120px 0; position: relative; background: linear-gradient(180deg, var(--paper) 0%, var(--forest-lightest) 50%, var(--paper-warm) 100%); }
+
+        .bg-warm { background: linear-gradient(180deg, var(--paper-warm) 0%, var(--forest-lightest) 50%, var(--paper) 100%); }
+
+        .grain {
+            position: fixed; inset: 0; pointer-events: none; z-index: 9998;
+            opacity: 0.025;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            background-repeat: repeat; background-size: 256px 256px;
+        }
+
+        .reveal-text { opacity: 0; visibility: hidden; transform: translateY(30px); }
+
+        @media (max-width: 900px) {
+            .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .hero-text h1 { font-size: 42px; }
+            .hero-text .intro { margin: 0 auto; }
+            #heroMap { width: 340px; height: 340px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .status-grid { grid-template-columns: 1fr; }
+            .section-title { font-size: 28px; }
+            .carousel-slide { width: calc(100% - 40px); margin: 0 20px; }
+            .carousel-stats { grid-template-columns: repeat(2, 1fr); }
+            .navbar-links { display: none; position: absolute; top: 60px; right: 16px;
+                background: var(--card); border-radius: var(--radius-sm);
+                box-shadow: var(--shadow-lg); padding: 16px 24px;
+                flex-direction: column; gap: 16px;
+            }
+            .navbar-links.show { display: flex; }
+            .navbar-links a { color: var(--ink) !important; }
+            .navbar-toggle { display: block; color: #fff; }
+            .navbar.scrolled .navbar-toggle { color: var(--ink); }
+        }
+        @media (max-width: 600px) {
+            .hero-text h1 { font-size: 32px; letter-spacing: 2px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .chart-wrap { padding: 24px; }
+            section { padding: 80px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="grain"></div>
+    <div id="progressBar"></div>
+
+    <nav class="navbar" id="navbar">
+        <div class="navbar-inner">
+            <div class="navbar-logo">中原粮仓<span> / 十年</span></div>
+            <ul class="navbar-links" id="navbarLinks">
+                <li><a href="#hero">首页</a></li>
+                <li><a href="#overview">十年总览</a></li>
+                <li><a href="#crop">作物结构</a></li>
+                <li><a href="#spatial">空间透视</a></li>
+                <li><a href="#drivers">拆解动因</a></li>
+                <li><a href="#status">现状观察</a></li>
+                <li><a href="#conclusion">总结展望</a></li>
+            </ul>
+            <div class="navbar-toggle" id="navbarToggle">&#9776;</div>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-inner">
+            <div class="hero-text">
+                <h1>十年耕织<br>中原粮仓</h1>
+                <p class="subtitle">数说十年中原粮仓</p>
+                <p class="intro">河南，用不到全国6%的耕地，生产了近10%的粮食。作为国家粮食安全的"压舱石"，本作品以2016-2025年十年数据为轴，全方位展现中原粮仓的坚守与蜕变。</p>
+            </div>
+            <div class="hero-map-wrap">
+                <div class="interactive-map">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="henanMap" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;">
+<path class="map-city" name="濮阳市" id="PUYANG" d="M628.4,53.4c-0.3-1-3.9,2-5,3.4s-7,3.8-8.9,3.9c-1.8,0.1-6.1,0.1-8.4,1.8c-2.3,1.7-5.4,3.1-7.2,4.1s-4.2,2.8-5.7,4.7c-1.5,1.8-3.6,2.6-6.5,2.8c-2.9,0.1-3.7,0.9-5.2,2.4s-2.5,0.3-3.4-1.4c-0.9-1.6-2-1.6-3.5-1.1s-1.1,4.1-0.4,5.4c0.7,1.3-4.1,4.8-7.9,9.6s-4.5-0.5-4.5-2.8s0.3-2.4,1.6-5.4s1.2-3,0.4-6.9c-0.9-3.9,2.9-6.4,5.4-8.8s1.9-2,1.9-5.5s2.6-5.3,3.1-6.9c0.5-1.6,1.6-3.8,0.4-5.4c-1.2-1.6-2.2-1.3-2.2,0.6c0,1.9-2.6,2.6-4.6,2.9s-2.5,3.4-5.1,5.1c-2.6,1.8-3.6-2.1-4.1-3.9c-0.5-1.8-3.1-3.5-4.7-6.4c-1.6-2.9-6.5-1.1-8.4-1.4c-1.9-0.3-7.1,3.3-8.6,5.3s-1,3.1-1.2,4.5s-0.4,3.1-2.2,3.1c-1.9,0-1,1-1,2.5s-0.9,1.4-2.1,0.8s-3,0.3-4.5,1.1c-0.3,0.2-0.6,0.2-0.8,0.2c0,0.2,0,2.7,2.8,4.6c2.9,2,4.3,3.7,3.8,7.3c-0.5,3.7,1.2,7.1-1.8,8.9s-2.5,2.2-2.7,4.5c-0.2,2.2-0.6,3.1-2.1,4.7c-1.5,1.5-4.2,2.9-1.9,6.9c2.2,4,1.5,5.3,0.3,8s-2.1,5.2,0.6,6.8c2.6,1.6,4.2,3.2,5.6,5.1c1.5,1.9,1.6,3,0.5,4.1c-1.2,1.1-2.6,0.1-0.9,3.3c1.7,3.1,3.6,7.8-0.6,10.9c0.2,0.2,0.4,0.4,0.5,0.7c1.7,2.2,5.4,3,6.4,3.2c-0.1-0.6-0.2-1.2-0.2-1.7c0-2.1,9-6.4,10.3-7.5c1.2-1.1,2.7-1.9,4.8-1.6c2.1,0.2,5.4-4.1,8.4-6.2s5.2-6.7,4.1-8.4c-1.1-1.7,1.4-2.5,2.6-2.5c1.2,0,2.2-1.7,2.2-3.6s2.1-4.3,3.8-5.9s2.8-3.5,2.7-4.8c-0.1-1.4,2.5-1.6,3.7-1.9c1.2-0.2,5.1-0.9,6.3-1.7c1.2-0.9,2.5-1,4.6-0.3s2.9-0.8,4.2-2c1.3-1.3,4.4-4.2,4.5-6.3c0.1-2.1,1.1-1.8,2.5-3.4c1.5-1.7,8.9-1.9,11.2-2s0.2-3.7-0.7-4.8c-0.9-1.1,0-2.8,1.5-3.5s1.9-1.9,2-2.9c0.2-1.1,8.4-1.7,10.5-1.4c2.1,0.3,2.4-3.1,2.2-5.5s1.6-2.5,3.2-5.4C631.2,54.5,628.7,54.5,628.4,53.4z"/>
+<path class="map-city" name="新乡市" id="XINXIANG" d="M528.8,137.7c-2-2.5-2.9-3.1-6.5-1.9c-3.6,1.2-4.3,3.4-7.2,3.4s-7.6,1.5-10.5,2.4s-10.3,3.4-10.7,6.2c-0.3,2.8-0.1,5.8-2.8,7.3c-2.6,1.4-6.7-0.2-8.7-1.8c-2-1.5-2-4-1.2-5.5s1.8-3.6,1.8-6.2s0.1-6.8,0.6-8.4c0.5-1.6,1-6.2-1.6-8.3c-1.2,1.2-3.1,2.3-4.4,2.5c-1.9,0.3-5.6,1.5-7-3s-4.6-2-7.2-2.7s-6.7-4.8-9.7-6s-2.6-1.8-2.5-5.7c0.1-4-0.5-4.5-0.9-7.4c-0.5-2.9-3.5-1.2-5.6-1.2s-3.2-0.6-4.2,1.2c-1.1,1.8-6.2,0.6-11,1.1s-1.2-2.3-1.1-4.7s-2.3-6.1-4.9-10c-2.2-3.3-7.1-4.1-8.6-4.2c0,1.1-2.7,1.4-5.2,1.4c-2.9,0-1.5,3-0.5,4.1c0.9,1.1,1.7,2.8,0.5,4.5s0.3,2.8,0.4,4.7c0.1,1.9,1.1,5.1,2.1,7.1s-2.5,1.5-4.9,0.1s-2,0.8-1.9,3s-1.7,4.1-3.4,4.3c-1.7,0.2-1.2,3.4-1.7,5.5c-0.6,2.1-4.1,1.5-6.5,2.1c-0.6,0.2-1.2,0.5-1.8,0.8c0,0.7-0.1,4.2,1,5.2c1.3,1.1,3.3,2.5,3.5,5.1c0.2,2.6,1.1,5.6,1.6,7.9c0.5,2.3,1,3,1.8,3.8c0.8,0.7,1.3,2.2,1.4,3.6c0,1.5,0.8,3.4,0.7,5.2c-0.1,1.8-2.5,5.9-0.6,8.1c2,2.2,3,3.5,4.8,4.4s3.8,2.2,4.3,4.4s1.3,8.3,0.2,9.5c-0.9,1-2.2,2.7-2.7,3.3c2.9,1.5,9.4,5.2,12.5,4.4c3.6-1,7.2,1.6,10.3,2c3.1,0.4,7.5,1.5,9.9,0.1s5.9-6.4,12-6.6c6.1-0.2,7,2.3,9.2,3.8c2.2,1.4,4.6,3.5,8.5,2.7s8.4-1,11.1,0.3c2.8,1.3,5.8,1.8,8.4,0.2s10-3.7,12.2-2.8s6,4.2,8.1,3.4c2.1-0.8,3.6-2.3,2.5-3.7s-3.8-3.7-2.3-4.8s4.7-2.8,5.3-4c0.4-0.7,0.6-0.9,0.8-0.9c-0.1-0.5-0.2-1.1-0.4-1.5c-0.5-1.7,1.7-5.2,3-8.3c1.2-3.1,0-3.7-1-5.3s1.4-4.5,4.1-5.6c2.7-1.1,5.3-3.5,9.8-7.4c3.4-3.1,3.1-5.9,2.8-8C534.1,140.8,530.5,139.9,528.8,137.7z"/>
+<path class="map-city" name="焦作市" id="JIAOZUO" d="M410.8,170.4c-0.5-2.2-2.5-3.5-4.3-4.4s-2.8-2.2-4.8-4.4s0.5-6.3,0.6-8.1s-0.7-3.7-0.7-5.2s-0.6-2.9-1.4-3.6c-0.8-0.7-1.2-1.4-1.8-3.8c-0.5-2.3-1.4-5.3-1.6-7.9c-0.2-2.6-2.2-4-3.5-5.1c-1.2-1-1-4.5-1-5.2c-1.8,1.1-3.7,2.9-6.3,2.9c-3.5,0-2.4,1.1-3.4,3.3c-1,2.2-1.5,1.7-4.1,0.6c-2.7-1.1-6.1,1.5-7.4,4.1c-1.4,2.7-3.3,6.2-5,8.5s-7.5-3-9.5-4.9s-1.6,0.2-1.4,1.2c0.3,1-0.3,4.3-0.1,5.2c0.2,0.9-0.5,1.9-2.7,1.9s-3.4,1.5-4.7,3.6c-1.3,2.1-4.9,1.7-7.7,0.3c-2.8-1.3-4.6,2.3-6.5,4.3c-0.1,0.1-0.2,0.1-0.2,0.2c0.1,2,0.6,8.7,0,10.5c-0.7,2.1-1.9,4.8-3.7,7c-1.7,2.2-5.4,9.5-7.1,10c-1.6,0.5-2.8,1-2.7,2.2l0,0c2,1.6,2.5,8.9,3.6,9.7c1.3,1.1,5.2,3.4,7,3.3c1.8-0.1,3.3-0.4,4.5,1.1s3.6,1.6,6.9,0.2c3.3-1.4,11-3,15-2.5c3.9,0.5,11.3-0.8,16.5-5s6.5-6.1,8.9-6.3s6.7-3.5,9.1-3.4s14.3,0.9,16.1,1.7c0.3,0.1,0.7,0.3,1.1,0.6c0.4-0.5,1.8-2.3,2.7-3.3C412.1,178.7,411.3,172.6,410.8,170.4z"/>
+<path class="map-city" name="济源市" id="JIYUAN" d="M322.5,181.5c1.7-0.5,5.4-7.8,7.1-10s3-4.9,3.7-7c0.6-1.8,0.2-8.6,0-10.5c-2.1,1.5-8-3.4-9.8-6.5c-1.9-3.2-2.7,1.2-2.2,2.9c0.6,1.7-1.2,2.4-3.1,2.4s-9.5-0.3-12.7-1.2s-5.6,0.2-7.8,1.2c-2.2,1-7.3-0.1-7.4-1.5s-2-1.7-3.8-0.5s-8.3-3.6-9.4-4.2c-1.1-0.6-4.2-1.2-5.4-0.6c-1.1,0.6,0.1,3.8,1,4.7c1,0.9-1.6,10.4-1.7,12.3s-0.6,5.2-1,7.4c-0.3,2.1-1.8,1.8-2.6,0.8c-0.1,0.5-0.3,2.6,2.7,2.3c3.5-0.3,6.8-0.5,8.2,1.5c1.3,2,3.4,4.9,5.1,4.8c1.7-0.1,2.4,1.1,3.1,2.2c0.6,1,1.5,3.1,2.4,0.6c1-2.6,1.3-2.7,2.2-1.4c0.9,1.3,2.2,3.7,3.8,2.4c1.6-1.3,2.4,1.3,4.7,1.7c2.2,0.4,5.2,1,6.7,1c1.2,0,4.2,0.4,6.4,1.4c4.3,2.2,0.3,1.5,3.5-2.5c1.1-1.4,3.2-1.5,3.5-1.4C319.8,182.6,320.9,182,322.5,181.5z"/>
+<path class="map-city" name="开封市" id="KAIFENG" d="M463.2,192.4c0.5,1.6,0.4,2.1-0.8,2.9c-1.2,0.8-3.5-0.1-4.2,0.7s-1.1,1.8-0.1,3s1.2,1.7,1.2,4.9s-1.6,3-0.4,5s0.5,3.9,0.2,5s-0.9,0.3-0.8,2.8s0.5,4.9-0.6,6.5c-1,1.6-4.7,9-6.2,9s-2.4,0.4-2.9-0.2c-0.5-0.6-1.5,1.3-1.3,2.4c0.2,1.1,1.2,4.4-1,4.2s-7.4-2.6-8.6-0.8c-1.3,1.8-1.7,3.9-1.7,5.2s1.3,3.4,0.9,5.6c-0.3,2.2-0.9,3.5,0.4,4.5s2.9,0.9,3.8,2.4s1.7,2.7,3.2,3.1s2.1,1.1,2.8,2.1c0.7,1,1.6,1.4,3.7,1.1s2.9-0.8,3.8,1.1s2.7,3.2,5.4,2.3c2.7-0.9,3.5-3.7,5.5-3.8c2-0.1,4.6,0.4,5-1.5s2.5-2.2,3.8-1.5s7.2,4.4,8.9,1.8c1.7-2.6,1.5-3.2,1.4-4.7c-0.1-1.5,0.2-2.3,2-2.3c1.9-0.1,4.2,2.4,6,3.4s3.7,3.5,6.7,3.5s4.6,2.8,6.9,2.7c2.3-0.1,3.8,0.6,5.3-1c1.5-1.6,3.6-3.1,5.3-3.9s2.6-1.1,5.3-1.2c2.2-0.1,1.8-1.7,1.6-2.1c-0.1-0.1-0.2-0.1-0.3-0.2c-1.8-1.1-2.2-4.9-0.3-6.6c1.9-1.7-0.6-5.8-0.6-7.7s1.9-2.2,3.2-3.2c1.4-1,2-2.6,2-4.9s-0.4-4.1-1.6-5.8c-1.2-1.7-1.1-7.6-1.2-9.2c-0.1-1.6,0.3-3.9,1.6-4.7c1.2-0.8,0.6-2.9-0.9-4.8c-1.5-1.9,0.2-2.1,1.6-2.1c1.4,0,2.9-0.5,3.8-1.2c0.9-0.8,6.1-1.2,7.5-1.4c1.5-0.2,2.6-0.3,4.6-0.9c2-0.5,5.4-0.9,9.6-2.5c3.7-1.4,3.9-4.7,3.9-5.5c-1.9-0.2-2.2-1-1.9-2.9c0.4-2.4,0.7-4-1.5-4.2s-1.2-1.5-0.2-3.1s-1.1-2.1-3.7-1.9c-2.6,0.2-2.8-2.4-5.6-4c-2.7-1.6-3.3-1.2-5.6,0.7c-2.2,2-2.3,1-5.9-0.6c-3.6-1.6-2.6-0.4-4.1,1.6s-3,0.9-4.3-0.1c-1.4-1-3-2.2-4.7-0.5c-1.3,1.3-1.8-0.3-2.2-1.9c-0.2,0-0.4,0.2-0.8,0.9c-0.6,1.2-3.8,2.9-5.3,4s1.2,3.4,2.3,4.8s-0.4,2.9-2.5,3.7c-2.1,0.8-5.9-2.5-8.1-3.4s-9.6,1.2-12.2,2.8s-5.6,1.2-8.4-0.2c-2.8-1.3-7.2-1.1-11.1-0.3c-2.7,0.5-4.7-0.3-6.4-1.3C464.2,188.6,462.8,190.9,463.2,192.4z"/>
+<path class="map-city" name="商丘市" id="SHANGQIU" d="M684.7,289.5c-0.1-3.2-0.5-2.4-1.9-3.1s-1.4-2.1-1.9-3.3c-0.6-1.2-1.1-2.5-1.3-4.4s-2.1-2.8-3.5-4c-1.3-1.2-2.1-3.8-2.7-5.3c-0.6-1.5,2.5-1.4,3.9-2.3s0.7-3.3-0.2-4.6c-0.8-1.3-0.7-2,0.6-5.5c1.2-3.5-0.7-3.6-2.6-3.7c-1.9-0.1-3,0.2-5,1.7s-4.1,0.2-7.7-0.2c-3.6-0.4-2.8-0.7-3.7-2.5c-0.9-1.7-1.2-1.7-3-2.4s-3.8-2.7-5.2-4.1c-1.4-1.4-2.4-2.1-4-1.2c-1.6,0.8-1.7-0.2-2.6-2.1c-0.8-1.9-1.1-3.1-2.3-4.7c-1.2-1.6-0.7-2.1-1.2-3.5s0.4-3,1.9-4s0.9-2.2,0.7-3.9c-0.2-1.6,1.1-3-0.2-3.7c-1.2-0.7-2.7,1.8-4.9,3c-2.1,1.2-1.8-2.6-3.5-4.4c-1.7-1.9-2.6-0.8-4.4,0.5c-1.7,1.3-3.1-0.7-4.2-2.6c-1.1-1.9-3.4,2-5,2.6c-1.6,0.7-10.1,2.6-13.1,1.2c-3-1.3-6.8-2.1-10.2-2.1s-0.4,1.8-1.1,3.3c-0.8,1.5-2,0.9-4.5-0.3c-2.4-1.2-8.6-0.4-10.8-1c-2.3-0.6-4.2-4.5-5.9-6.1c-1.7-1.7-1.4-3.5-2.2-10.5s-2.6-7.6-4.9-10c-2.3-2.4-6.2-2.7-9.8-2.7c-0.8,0-1.3,0-1.8-0.1c0,0.8-0.2,4.1-3.9,5.5c-4.3,1.6-7.6,1.9-9.6,2.5c-2,0.5-3.1,0.7-4.6,0.9s-6.7,0.6-7.5,1.4c-0.9,0.8-2.4,1.2-3.8,1.2c-1.4,0-3.1,0.2-1.6,2.1c1.5,1.9,2.1,4,0.9,4.8c-1.2,0.8-1.6,3.1-1.6,4.7c0.1,1.6,0,7.5,1.2,9.2s1.6,3.5,1.6,5.8s-0.6,3.9-2,4.9s-3.2,1.3-3.2,3.2s2.4,6,0.6,7.7c-1.9,1.7-1.5,5.5,0.3,6.6s3.7,1.8,4.5,3.3s1.6,2.4,3.4,2.4s4.3,0.5,5.4,1.9c1.1,1.5,5.1,1.2,6.6,2.7s1.5,1.6,1.5,3.7s-0.8,11.4-0.1,12.6s0.9,4.1-0.6,5.1s-3.4,1.9-3.4,4.2s1,7.5,2.4,7.5s0.9-0.2,2-1.7s0.9-2.6,2.9-2.1s2.9,0.6,4.8-1.1c1.8-1.7,2.2-2.5,5-3.1c2.7-0.6,2.1-1.8,4.4-0.9c2.4,0.9,3.1,0.4,3.8-0.5s1.4-2.3,2.8-1c1.4,1.3,6.7,3.7,8,2.1c1.2-1.7,0-2.9,3.2-3.5s3.4-0.9,3.5-3.1s-0.1-3.7,1.8-3.3c1.9,0.4,3.6-0.4,5.6,0.1c1.9,0.4,3.6,1.7,3.8,1.8c0.4-0.3,0.8-0.5,1.1-0.7c2.1-1.4,5.3-1.1,9.3-1.1s4.8,1.8,5.8,3.9s1.7,2.4,4,1.7c2.3-0.7,3-0.3,4.4,0.7c1.4,0.9,5.2,2,6.7,3.7c1.6,1.7-0.5,6.8-0.5,7.7c0,0.9,1.6,2.1,3.3,1s2.6,0.3,2.6,1.3s-0.3,2.6,1,3.2s0.7,3.4,0.7,5.9s3.2,4.8,4.7,5.8s4.5,4,5.3,3.2s3.2-1,5.9-2s4.7-2.4,5.8-3.4c1.1-0.9,3.8-1.7,6.3-1.9c2.5-0.2,5.2-5.8,5.4-6.9c0.2-1,2.7-2.8,5.4-3s5.4-3.1,6.9-3.9s3.7-0.7,5.6-0.3C686.4,296.9,684.8,292.7,684.7,289.5z"/>
+<path class="map-city" name="三门峡市" id="SANMENXIA" d="M197.1,295.4c2.8-1.1,4.9-3.9,6.6-5.2c1.7-1.3,0.4-4.7-0.1-7.5c-0.5-2.9,0.9-3.9,1.9-5.5s0.7-2.3-1.6-2c-2.2,0.3-2.4,0-3.8-2c-1.4-2-1.8-2.4-3.8-4.1s-7.1-4.8-8.9-5.5c-1.8-0.7-1.3-1.4,0.2-2.7c1.6-1.3,0.2-2.3,1.2-7.4c1.1-5.2-0.1-3.8-1.8-5.6c-1.7-1.9-2.6-2.3-3.9-3.8c-1.3-1.6,2.2-1.5,2.9-2.7s2.2-2.5,3.6-2.5c1.4,0,2.1-0.3,2.4-1.8c0.3-1.5,2.7-0.9,4.4-2.1c1.7-1.2,4.5-0.1,6.8-0.1s6.2-1.9,9.3-3.2c3.1-1.2,4.1-2.7,4.4-4.7c0.3-2.1,4-1.2,5.5-2.2s10.3,2.2,11.4,2.2c1.2,0-0.2-0.7-0.8-2c-0.7-1.2,1.5-2.2,4.1-1.9s1.5-1.3,2.6-2.6c1.1-1.2,2.2,1.6,3.6,1.6c1.5,0,2.1-1.3,3.1-2.8s2.2-0.2,4.6-0.3c2.3-0.2,1-0.9,1.4-2s3.1,1,4.9,2.8c1.7,1.8,2.1-0.2,2.2-1.5c0.2-1.3,1.2-3,2.6-5.2s2.8-5.2,3-7c0.1-1.9,0.8-3.5,1.8-5.5s-0.9-4.5-2.7-6c-1.9-1.5-1.4-1.6-0.4-2.6s-0.3-1.9-2-1.9s-3.8-2.2-5.5-2.2c-1.6,0-2.1-0.2-1.6-1.9c0.4-1.6,1-1.9,3.5-2.6c2.5-0.8,3.4-1.8,4.8-3.4c1.4-1.6-1.4,0.2-2.2-0.6s-0.5-2,1.4-2.5c2-0.5-0.9-2.6-2.9-2.6c-1.8,0,2.7-4.6,3.6-5.4c-1.2-0.2-1.5-0.6-2.7-1.1c-1.6-0.7-1.6-0.9-2.2,0.5c-0.7,1.4-1.3,1.4-2.5,0.3c-1.2-1.1-3.5,0-5.4,0.3s-2.4,0.6-2.9,2.5c-0.4,1.9-10.1,5.1-11.6,5.1s-1.1,2.2-0.2,4.1c0.9,1.9-2.5,2.2-3.5,2.4c-1,0.3-1.5,3.6-3.1,4s-1.3,1.4-1.2,3.5s-2.2,3-3.4,2.3c-1.3-0.6-2.2-0.4-4.2,1.5c-2.1,1.9-3.4,1-4.2,0.3s-1.4-1.3-2.2-0.4c-0.8,0.8-2.5,1.1-4.6,1.3c-2.1,0.3-4.2-0.9-6.4,0.1s-7.1,1.5-9.9,2.4c-2.8,0.9-4.7-1.8-5.3-0.7s-7.5,5.4-10.3,6.5s-6.4,4.1-7.8,4.2s-2.2-2.5-3.1-2.5c-0.9,0-1.9,4-2.3,5.1c-0.5,1.1-4.5,1.1-6,1.1s-4.7,0.2-6.7,0.7s-5.6,3.9-7.2,5.4s-7.8,1.3-10.2,1.4c-2.4,0.1-4-0.6-6.1-2.1c-2.1-1.6-5.6,0-7.6,0.4s-2.3,1.6-3.5,1.6s0.6,2.2,0.7,3.8s-0.5,1.8-2.1,3.3c-1.7,1.4,2.5,11,3.3,11.6s1.8,2.2,3,1.8s2.4,0.1,2.4,2.3s0.8,3.1,2.5,4.6s-5.2,5.1-6.7,6.6c-1.5,1.6-0.3,5,1.8,4.9s3.3,2.3,6,2.6c2.7,0.3,2.3,2,4.1,4.1c1.9,2.2,3.7,2.3,6.3,2.6c2.6,0.3-2.4,5.9-4.4,9c-2.1,3.1-1.8,6.3,1.5,6.2c3.3-0.1,1.6,0.7,2.2,2.2c0.7,1.5,1.9,3.6,3.5,5.3c1.6,1.7-3.6,5-5.6,6.2c-1.9,1.2-0.9,2.7-0.5,4.1s1.8,1.7,2.7,1.7s2.4-0.7,3.8,0.6c1.4,1.2,6.9,5.6,9.9,7.9c3,2.2,3,8.8,4.4,12.6c1.4,3.8,7.9,4.9,9.8,5.8c1.4,0.7,3.2,3,4.2,5.3c0.6-0.1,2.7-0.2,3.9,1.1c1.3,1.6,2.8,2.3,4.6,0s6.9-7.6,5.9-9.3c-1-1.7-1.6-1.9-1.6-1.9s-2.4-1.2-1.7-2.8c0.7-1.6,0.8-1.9,2.3-1.1c1.4,0.8,3.6,1.3,4.1-1.6s2.9-9.9,5-9.2c1.2,0.4,3.1,1.4,4.8,2.1c-1.2-1.6-2.5-8-3.4-10.2C192.1,298.6,194.3,296.5,197.1,295.4z"/>
+<path class="map-city" name="漯河市" id="LUOHE" d="M474.5,338.6c-0.9-1.3-1.2-2.4-1.2-4.4s0.2-2.6-1.2-3.7c-1.4-1.2-0.4-4.7-1.1-6.5c-0.7-1.7-0.2-5-1.6-3.7s-2.7,2.1-4.2,2.4c-1.5,0.2-3.8,3.4-5.9,4.2c-2.1,0.8-1.5-2.2-2.5-3.9c-1-1.6,0.6-4.1,1.1-5.9c0.5-1.7,2.6-4.4,3.5-6.4s0.4-2.9-1.8-5.1c-2.1-2.1,0.2-3.6,0.2-7s-3.3-5-5.4-5.1s-4.1-2.7-5.3-3.8c-1.3-1.1-5.9,0.6-7.9,2.1c-2,1.6-4,2.4-4.8,3.5s-1.4,2.3-1.9,4.9s-2.2,2-3.5,0.5s-2.7-1-3.8,0.2c-1,1.3-3.4,0.7-4.7,2.1c-1.3,1.4-0.2,3.9,0.2,5.7c0.4,1.8-0.7,5.1-1.3,7.2c-0.7,2.1,3.5,4.3,2.8,5.8c-0.6,1.5-2.1,2-3.6,1.5s-3.4-1.5-5.5-0.6s-4.5,1.1-5.8,1.7s1.5,3.4,1.4,5.8c-0.1,2.3-2.5,4.2-4.1,4.9c-1.6,0.7-3.5,2.9-3.7,4.8s-2,4.1-3.8,5.5c-1.8,1.3-1.3,3.8-2.2,5.6c-0.8,1.8,2.6,1.6,4.7,2.8c2.1,1.2,3.1,0.8,4-0.4c1-1.2,3.3-0.3,4.4-0.4c1-0.1,5.1,0,5.8,0.7c0.7,0.6,1.8,0.5,2,0.4c0.1-1.2,2-2.3,3.9-2.3c2.2,0,6.5-0.2,7.8-1s2.6,0.3,4-2.2c1.5-2.4,4.2-1.9,5.4-1.8c1.3,0.1,5.2,0.6,6.7-1.6s3.1-5,5.1-3.6s3.6,1.3,5.1,2.6c1.5,1.3,3.2,3.7,5.2,3.8c2,0.1,3-2.7,2.8,0.6c-0.2,3.3-0.1,4,1.4,2.4c1.5-1.7,4.2-2.1,5.5-2.8c1-0.5,1.3-3.1,2.4-3.5C474,343,475.4,339.8,474.5,338.6z"/>
+<path class="map-city" name="驻马店市" id="ZHUMADIAN" d="M523.2,389.1c-2.1-0.7-0.9,1.1-3.6,0.8c-2.7-0.3-5.1-0.7-5.3-2.2c-0.1-1.5-1.4-1.5-3.7-3.2s-2.6-3.3-3.3-5s-0.1-4.2,1.6-5.3c1.7-1.2,1.7-4.8,1.5-6.7c-0.2-1.9-1.6-2.9-4.2-3.6s-2-2-3.4-3.3s-2,1.9-3.9,0.9s-1.9-5.6-2.5-7.7c-0.6-2.2-1.5-2.6-3.2-2.9s-1.9-0.7-3.3-2.3c-1.3-1.6-5.3-0.7-7.6,0.1c-2.3,0.8-5.4-1.5-7.7-3.3c-2.3-1.8-2.5,2.5-3.8,3.2s-4,1.1-5.5,2.8c-1.5,1.7-1.6,1-1.4-2.4c0.2-3.3-0.8-0.5-2.8-0.6s-3.7-2.5-5.2-3.8s-3.1-1.2-5.1-2.6s-3.6,1.4-5.1,3.6s-5.4,1.7-6.7,1.6c-1.2-0.1-4-0.6-5.4,1.8c-1.5,2.4-2.6,1.4-4,2.2s-5.7,1-7.8,1c-2.2,0-4.2,1.4-3.9,2.8c0.3,1.4-0.6,2.2-1.7,3s-1.4,2.2-1.3,3.9c0.1,1.7-1,3.6-2.2,5.5s-0.1,8.5,1,12.1c1.2,3.6,2.4,2.6,2.5,4.3c0.1,1.6-9.1,0-11.9-0.3c-2.5-0.3-9.6,2.4-10.8,2.9c0.4,2.7,0.4,5.3-0.6,6.4c-1.9,2.2-4.6,0.5-6.4-0.1c-1.9-0.6-4.9-1.2-6.5-0.1s-2.8,0.8-4.2-0.1c-1.4-0.9-4.1-2.4-4.4-0.4c-0.3,1.9-1.3,3.8-3.2,5.7c-1.9,1.9-3.3,3.8-2.8,6.6c0.5,2.9,0.8,4.7,3.2,6.6c2.5,1.9,3.4,1,3,3.9s-1.2,5.7-1.2,7.7s0.6,3.3,1.2,4.7c0.5,1.4,1.4,1.5,1.1,3.6s0.1,3.2,1.3,3.4c1.2,0.2,4.1,1.4,4.2,3.8s-1.2,2.4-1.8,1.1c-0.6-1.3-1.2-2.6-2.2-0.6c-1.1,1.9-3.3,4.6-2.4,7.2s2.6,1.2,5.7,1.1s5-0.6,7.7,1.6c2.7,2.3,2.4,2.6,3.3,0.4c1-2.1,0.9-4.5,3.9-3.1s9.4,5.8,11.6,4.6c2.1-1.2,3.4-2.9,3.5-5s0.6-5.9,2.1-6.5s-0.3-3.4,2.2-3.9c2.5-0.6,5-1.2,7.5,0.7c2.5,1.9,3.7,2,4,4.6c0.3,2.7,0.3,4.7,2.9,5.1c1,0.1,1.6,0.4,1.8,0.6c0.6-0.2,2.4-0.8,3-1.8c0.7-1.3,2.9-1.6,4-0.1c1.2,1.5,5,1.8,5.4,3.9s0.7,4.8,3.6,3.3s2.7,0,4.7-0.9s4.8-0.9,5.2,3.1c0.4,3.9,3.5,10.1,5.9,6.4c2.3-3.7,4.5-6.2,5.1-4.5s1.2,2.2,2.3,1.9c1.2-0.3,2.4-1,2.6,1.8c0.1,2.8,0.2,3.8,1.3,4.4c1.1,0.5,1.3,0.9,1.8,2.6s-0.2,2.6,1.3,2.3c1.6-0.3,2.5-0.4,3,1.5s-0.8,3,1.7,3.5c2.6,0.6,4.4,1.5,5.2,2.8c0.8,1.3,1.3,2.2,2.5,1.2s0.9-0.7,2.7-1.3c1.8-0.6,2-2.9,3.4-1.5s2.1,1.5,3.2,0.7s2.6,0.2,4-1.5c1.3-1.7,3.8-6.2,3.4-7.3c-0.4-1-5.7-4.6-5.8-6.6c-0.1-2.1-0.7-4.4-1.2-5.9c-0.5-1.6,1-2.7,3.2-2.6c2.1,0.1,6.4-0.1,8-0.5s3.3-3.7,4-2.2c0.8,1.5,2.3,2.3,3.9,2.1c1.5-0.3,5.9-2.3,4.8-4.5c-1.1-2.2-2.5-3-1.2-4.2c1.3-1.1,2.3-1.3,5.1-1.3c2.7,0,3.7,0.4,3.7-1.1s0.8-1.7,3.9-2.2c3-0.5,4.5-3.2,7-0.3c2.5,2.9,2.3,4.4,5.4,4.2c3-0.2,2.8,0.3,4.2,1.4c1.3,1.1,3.3,1.9,5.8-0.2c-0.2-0.6-0.2-1.3-0.3-2.1c-0.3-1.5,0.1-1.3,1.8-1.4s-0.1-2.1-1.4-2.5c-1.3-0.4-1.1-1.3-1.1-2.4s-0.5-4.2-0.6-6.2s-0.8-3.6,1-4.7s1.1-0.9,0.6-2.8s0.1-1.9,0.4-3.6c0.3-1.7-0.4-2.2-3.5-2.5s-1.8-2.4-2-3.8s-2.9,0.9-4.5,0.1s-2.5-0.4-4.4,0.1s-1.3-1.6-1.3-3.1s-4.9-1.3-6.3-1.2c-1.4,0.1-2.4-0.8-4.7-2.6c-2.3-1.8-1.7-4.2-0.1-6.4c1.6-2.2-0.1-3.5-1.2-5.8c-0.3-0.6-0.5-1.2-0.7-1.8C525.5,389.7,524.7,389.7,523.2,389.1z"/>
+<path class="map-city" name="信阳市" id="XINYANG" d="M548.2,442.1c-1.3-1.1-1.1-1.6-4.2-1.4c-3,0.2-2.8-1.2-5.4-4.2c-2.5-2.9-4-0.2-7,0.3s-3.9,0.7-3.9,2.2s-0.9,1.1-3.7,1.1c-2.7,0-3.8,0.2-5.1,1.3c-1.3,1.1,0.1,1.9,1.2,4.2c1.1,2.2-3.3,4.2-4.8,4.5s-3.1-0.5-3.9-2.1c-0.8-1.6-2.4,1.7-4,2.2c-1.6,0.4-5.8,0.6-8,0.5c-2.1-0.1-3.7,1-3.2,2.6c0.5,1.5,1.1,3.9,1.2,5.9c0.1,2.1,5.3,5.6,5.8,6.6c0.4,1-2,5.5-3.4,7.3c-1.3,1.7-2.9,0.7-4,1.5s-1.8,0.7-3.2-0.7c-1.4-1.4-1.6,0.9-3.4,1.5s-1.6,0.2-2.7,1.3s-1.6,0.2-2.5-1.2c-0.8-1.3-2.6-2.2-5.2-2.8c-2.6-0.6-1.2-1.7-1.7-3.5c-0.5-1.9-1.4-1.8-3-1.5s-0.8-0.6-1.3-2.3c-0.5-1.7-0.7-2-1.8-2.6c-1.1-0.5-1.2-1.6-1.3-4.4c-0.1-2.8-1.4-2.1-2.6-1.8c-1.2,0.3-1.7-0.2-2.3-1.9c-0.6-1.7-2.8,0.7-5.1,4.5c-2.3,3.7-5.4-2.5-5.9-6.4c-0.4-3.9-3.2-4-5.2-3.1s-1.8-0.6-4.7,0.9c-2.9,1.5-3.2-1.2-3.6-3.3c-0.4-2.1-4.3-2.5-5.4-3.9c-1.2-1.5-3.3-1.2-4,0.1c-0.6,1-2.4,1.6-3,1.8c0.4,0.4,0.1,0.9-0.3,1.3c-0.8,0.7-2,1.7-2,3.5s0.2,3,0.3,6.1c0.1,3.1-0.3,4.9-1.4,5.9c-1,1-3,1.5-3.2,1.6c0.5,0.6,0.8,2.6,1,5.2c0.3,3.7,1.9,5.9,2.9,7.8s-1.4,2.6-2.8,3.1c-1.5,0.5,1.2,8.3,1.5,8.5s1.5,1.3,1.5,2.9s-1.2,6.3-2.2,6.9c-1.1,0.5-2.2,0.2-2.5,0.9c-0.3,0.8,3.8,4.8,5.4,5.7c1.6,0.9-0.2,3.8-1.5,5.7s0.2,1.8,1.6,2.2c1.3,0.4,3,1.5,3,3.8s3,9.5,4,11.4s4.4-1.1,5.3-2.3s1.9-0.9,3.6,0.2c1.7,1.1-1.2,6.1-0.8,7.9c0.5,1.9,3.4,2.3,6.4,2s4.4-0.6,5.3-2.2c0.9-1.6,2.2-3.3,3.6-4.5s4.4-3.1,6.5-3.4c2.2-0.3,5.8-0.6,7.6,3.7c1.9,4.4,2.6,3.3,5.8,4.8c3.1,1.6,11.8,1.6,13.7,1c1.9-0.6,0.6-2.1,2.9-1.4c2.2,0.7,1.4-0.7,3.3-1.1c1.9-0.4,2,2.7,2.3,4.7s-1.6,5.5-3.1,8.4s0,6.7,1.7,7.9s2.8-1.1,3.9-2.1s6.7,4.1,7.6,5.6s2.5,1.9,5.4,2.2c2.9,0.4,3.7,3.8,5.6,5.1c1.9,1.3,6.1,1.9,8.4,1c2.3-0.9,3.7-0.8,5.9-1.1s1.8-0.1,3.1,0.9s2.8,0.1,3.3-1.2s0.9-1.9,2.5-1.9s1.7,0.3,3.4-0.4s2.1-3.5,2.3-6.1s0.9-3.4,2.6-4.8c1.7-1.4,3.4,0.1,4,2s1.4,2.1,2.8,2.1c1.4,0,0.8,5.1,0.1,7s-1.2,6-1.5,7.7c-0.3,1.8,0.5,2.6,2.4,2.1s2.3-0.2,2.3,1.4s0.6,2.2,1.6,1.5s2.6,0,4,0.1s4-1.7,6-1.8s0.4-3,1-4.4s1-3.1,0-4.4c-1-1.3-1.3-2,0.5-3.3s2.4-3.7,2.7-4.4s1.8-3.7,3.6-5.3s1.6-5,2.5-5.8s2-2.4,4.1-2.4s4.7-2.5,6-3.8s4.7-3.6,6.3-5.1s4.4-0.4,6.1-1.4c1.7-1,4.2-0.4,7,0c2.9,0.4,3.1,0.1,4-1.2s3-0.2,5.5-0.8s-0.1-3.7-0.8-5.9s0.6-3.4,1.9-5c1.3-1.6,1.4-3.3,0.5-4.5s0.4-12.7,0.4-15.2s0-4.1,0.4-7.1c0.4-3.1-0.5-4.5-1.7-6.7s-1.2-5.8-1.3-8.8s0.1-4.8-0.5-8c-0.6-3.1-1.8-7.9-2.4-9.7c-0.6-1.8-1.4-4-0.8-4.6c0.5-0.5,0.7-1.3-0.2-3.8s1.8-4.7,2.3-6.4c0.5-1.8-1.5-0.8-1.8-0.3s-0.8,2.4-1.4,2.9c-0.6,0.5-1.5,2-1.5,2.9c0,1-0.6,2.5-2.2,2.9c-1.6,0.4-2.5,1.8-3.5,3.1c-1,1.3-1-1.6-0.7-2.5c0.3-1-1.1-0.1-1.8,0.9c-0.7,1.1-2.2,0.2-3.2-0.8c-1-1.1-2.7,0.6-3.8,2.3c-1.1,1.7-0.6,3.1-0.4,4.7c0.2,1.6-2.2,1.2-2.8,0.8c-0.7-0.4-2.7,1.2-4.5,1c-1.7-0.2-3.5,0.2-4,0.6c-0.5,0.3-2.8-0.6-0.7-1.7s-0.8-1.8-1.8-1.9s-1.3-1-1.5-2.6s-2.7-2.4-3.5-4.5s-1.5-2.1-2.7-2.5s-3-2.2-4.3-4.1s-0.2-1.5-1.5-1.6s-5.2,2.7-7.4,3.4c-2.3,0.7-1.1-2.6-0.5-3.5s-3.7-0.8-5.1-1.4c-1.4-0.6-2.5,1.3-4.1,0.1c-0.8-0.6-1.1-1.2-1.3-1.8C551.5,444,549.5,443.2,548.2,442.1z"/>
+<path class="map-city" name="南阳市" id="NANYANG" d="M426,456.3c-0.1-3.1-0.3-4.4-0.3-6.1s1.2-2.8,2-3.5s1-1.6-1.5-2c-2.5-0.3-2.5-2.4-2.9-5.1c-0.3-2.7-1.5-2.8-4-4.6c-2.5-1.9-5-1.3-7.5-0.7c-2.5,0.6-0.7,3.4-2.2,3.9c-1.5,0.6-2,4.3-2.1,6.5c-0.1,2.1-1.4,3.9-3.5,5c-2.1,1.2-8.6-3.2-11.6-4.6s-2.9,1-3.9,3.1s-0.6,1.8-3.3-0.4c-2.7-2.3-4.6-1.7-7.7-1.6s-4.7,1.5-5.7-1.1s1.3-5.3,2.4-7.2c1.1-1.9,1.6-0.6,2.2,0.6c0.6,1.3,1.9,1.3,1.8-1.1s-3-3.5-4.2-3.8c-1.2-0.2-1.6-1.3-1.3-3.4c0.3-2.1-0.5-2.3-1.1-3.6c-0.5-1.4-1.2-2.7-1.2-4.7s0.7-4.8,1.2-7.7c0.4-2.9-0.5-1.9-3-3.9c-2.5-1.9-2.7-3.8-3.2-6.6c-0.5-2.9,0.9-4.7,2.8-6.6s2.9-3.8,3.2-5.7c0.3-1.9,3-0.4,4.4,0.4c1.4,0.9,2.6,1.2,4.2,0.1s4.6-0.5,6.5,0.1s4.6,2.2,6.4,0.1c1.9-2.2,0-10.4-1-13.6s1-3.7,1.1-6.5s-1.3-7.9-3-9.3s-3.5-2.1-5-1.7s-1.4,1.4-5.5,0.3c-4.2-1.2-3.2-3.5-5.5-6.5s-2.1-2.8-4.8-2.8s-2.5-2.5-3.7-6.5c-1.2-3.9-4.4-3.7-6-6.2s-10.4-4.8-12.9-6.9s-4.4,1.4-7.8,3.5c-3.5,2.1-4.4,1.6-8.1-0.2c-3.7-1.8-9.2,0-12.5-3c-3.2-3-2.8-0.7-4.8,1.8c-2.1,2.5-3.7-2.3-4.8-4.6c-1.2-2.3-4.9-1.8-5.8-4.4c-0.9-2.7-2.5-0.4-5.5,0.7s-5.4-1.5-6.2-4c-0.8-2.5-8.1-2.1-10.7-2.1c-2.7,0-3.3-1.4-4.8-2.6s-4.2,3.1-5.5,4.4c-1.2,1.3-1.9,3.6-0.9,6.1c1,2.6,2.3,2,1.9,4.5c-0.4,2.4-2.2,1.1-4-1.1s-2.9-1.4-2.9,0s-2.3,3.4-5,4.8c-2.7,1.3-3.8,1.7-4.6,0.9c-0.8-0.8-1.8-1.4-5.9-1.9c-4.1-0.4-1.4-4.9-1.9-6.8c-0.4-1.9-9-6.3-10.9-6.5c-1.9-0.1-2.6,0.7-3.7-1.4c-1.1-2.1-5.2-2.1-7.8-3.1s-7.6-1.3-10.6-1.6c-3-0.2-5.9-1.7-7.5-3.5s-5.3,0-7-0.2s-5.7-2.4-7.7-3.1c-2.1-0.7-4.5,6.3-5,9.2c-0.5,2.9-2.7,2.4-4.1,1.6c-1.4-0.8-1.6-0.5-2.3,1.1s1.7,2.8,1.7,2.8s0.6,0.2,1.6,1.9c1,1.7-4.1,7-5.9,9.3c-1.8,2.3-3.3,1.6-4.6,0c-1.1-1.3-3.2-1.2-3.9-1.1c0.4,0.9,0.7,1.8,0.7,2.5c0.2,2.6,0.8,4.1,1.8,6c1,2-2.6,5.9-3.6,7c-1.1,1.2,2.6,4.6,3.8,6.2s0.1,4.2-1.3,4.9c-1.4,0.7-1.1,6.1-1.4,8.3c-0.4,2.1,0.9,5.9,1.9,6.1s1,1.1,0.8,3c-0.1,1.9,0.4,2.4,1.8,1.1c1.4-1.3,1.1-1.1,2.2-0.7c1.1,0.4,6.6,7.4,8,8.9c1.4,1.6,0.9,2.5-0.7,3.2c-1.5,0.7-1,2.1-0.2,2s5.7,0.5,6.9,1.1s0.2,1.6,0.2,2.6c0,1.1,0.7,1.1,1.7,1.5s1.8,4.4,0.7,5.9s-1.5,4.8-1.5,6.2c0,1.4,0.6,0.8,1.8,0.7c1.1-0.1,2.2-0.2,2.2,1.6s1,2.3,2,2.7c1.1,0.4,3-0.2,3.4,1.1c0.4,1.3,0.5,1.8,1.8,1.3c1.2-0.4,1.1-0.4,2.5,1.1c1.3,1.4-0.1,3.2,0.7,4.3c0.7,1.1,2.3,0,4.4,0c2.1,0-2.3,3.1-1.9,4.2c0.5,1.1,3.6,4,5.3,5.6s3.6,6.5,4.8,9s4.8,0.6,5.7-0.4s1.4-1.9,2.3-0.4c1,1.5,3.1,0.2,6.3,0.7s6.5,6.2,6.8,8c0.2,1.9,1.1,3.3,4,3.5c2.8,0.1,5.5,2.2,7.5,2.7s4.3,1.5,6,0.6c1.7-0.9,3.1,3.1,5,4.9c2,1.8,3.1-0.1,3.6-1.3c0.5-1.2,1.8-1.6,2.9,0s3.7,4.4,5.1,5.4c1.5,1,2.9,2.2,5.5,2s4.7,2.6,6.6,2.9c2,0.4,3.2,3.8,4.4,4.3c1.2,0.5,4.2-2.6,4.3-4.3c0.1-1.7,3.1-0.4,5.5,0.6c2.5,1,3.8-1.1,6.7-1c2.9,0.1,4.2-0.1,5.4-1c1.3-0.9,10,1.7,11.6,2.1s5.2,1.3,7.8,1.1c2.6-0.2,6.4-3.1,8-4.2c1.5-1.2,2.6-0.7,3.3,1.4c0.7,2.1,3.1,0.1,3.9-1.1c0.9-1.2,5,1.1,6.4,1.7c1.4,0.7,0.4-2.6,1.9-4.5s7.7,2.9,9.8,3.7c2.1,0.8,2.5-0.4,3.4-1.9c0.9-1.4,2.4-3.4,4.1-3.7c1.8-0.3,3.2,1,4.3,2.5c1.1,1.5,4.9,5,6.2,6.1c1.2,1.1,0.8,3.3,2.1,4.2c1.3,0.9,3.6,2.1,4.4,2.1s2.1,0.2,3,1s1.6,2.3,4.1,1.2c2.5-1,5.8-4.9,6.7-6.3c0.9-1.5,1.7-0.6,3.3-0.3c1.6,0.2,2.9-0.9,3-2.3s0.4-1.1,1.5-1.1s2-1.7,2.3-3.4c0.2-1.7,2.4-2.1,4.3-1.8c1.9,0.3,2.3,0.6,3.5-0.9c0.4-0.5,0.7-0.5,0.9-0.3c0.2-0.1,2.2-0.6,3.2-1.6C425.7,461.2,426.2,459.4,426,456.3z"/>
+<path class="map-city" name="郑州市" id="ZHENGZHOU" d="M368.8,258.6c2.1,1.3,1.7-0.6,3.2-2.9c1.5-2.4,3.6-4.3,5.9-4.3c2.2,0,6-1.7,6.3-5c0.3-3.4,0.8-4.1,3.5-1.8c2.7,2.2,4.3,2.1,5.2,4.3c0.8,2.2,3.2,3.6,5.2,2.5s3.2-0.3,5.2,1.5s2.7,2.4,4.1,1.3c1.4-1.1,4.1,0.1,5.5,2.2s2.9,2.9,4.9,2.1s2.5-3.6,4.8-4.3c2.2-0.7,4.3-0.5,6.4-1.4c2.1-1,4.8-0.6,6.1-0.5c0.9,0.1,1.4,0,1.6-0.1c-0.2-0.9,0.1-1.9,0.3-3.4c0.3-2.2-0.9-4.3-0.9-5.6s0.5-3.4,1.7-5.2c1.3-1.8,6.4,0.6,8.6,0.8s1.2-3.1,1-4.2c-0.2-1.1,0.9-3,1.3-2.4c0.5,0.6,1.4,0.2,2.9,0.2s5.2-7.5,6.2-9c1-1.6,0.6-4,0.6-6.5s0.5-1.7,0.8-2.8s1-3-0.2-5s0.4-1.9,0.4-5s-0.1-3.7-1.2-4.9c-1-1.2-0.6-2.2,0.1-3s3,0.1,4.2-0.7s1.3-1.3,0.8-2.9c-0.4-1.4,1-3.8,1.3-4.2c-0.7-0.4-1.4-0.9-2.1-1.4c-2.2-1.4-3.1-4-9.2-3.8s-9.6,5.2-12,6.6c-2.4,1.4-6.9,0.3-9.9-0.1c-3.1-0.4-6.7-3-10.3-2c-3.6,1-11.8-4.2-13.6-5c-1.8-0.8-13.7-1.6-16.1-1.7s-6.8,3.2-9.1,3.4s-3.7,2-8.9,6.3c-5.2,4.2-12.5,5.5-16.5,5c-3.9-0.5-11.7,1.1-15,2.5c-1.2,0.5-2.4,0.9-3.3,1c-0.1,0.6-0.3,3.8,3.2,3.1c3.8-0.7,5.2-1.7,5.4,0.5c0.2,2.2,2.2,5.6,0.9,6.3c-1.3,0.7-5.2,1.2-6.4,1c-1.2-0.2-2.6,1.7-2,3.3s1.8,5.3,1.8,7.7s1.4,3.6,2.2,4.2c0.9,0.6,2.8,2.2,5.2,2.6c2.4,0.3,6.6,1.4,5.7,1.8c-1,0.4-4.5-0.6-4.5,1c0,1.7,0.2,6-1.6,5.9c-1.8-0.1-4-0.9-5.2-0.6c-1.2,0.3-3.1,0.2-4.3-0.5c-1.2-0.7-1.5-2-4-1.8s-3.9,0.2-3.7,2.2c0.1,2.1-0.4,5.4-0.7,7.2c-0.2,1.8-0.9,5.2,0.1,6.1c1,0.9,4.6,2.7,5.7,2.5s4.5-0.2,4.5,1.3s-0.6,3.9,3.3,3.8s6.3-1.7,9.2-1.5c2.9,0.1,3,2.3,5.1,2.3c1.7,0,3.3-0.2,3.9,0.6C363,258.1,366.9,257.5,368.8,258.6z"/>
+<path class="map-city" name="安阳市" id="ANYANG" d="M524.7,92c1.5-1.5,1.9-2.4,2.1-4.7c0.2-2.2-0.3-2.6,2.7-4.5c3-1.8,1.3-5.3,1.8-8.9c0.5-3.7-0.8-5.3-3.8-7.3c-2.8-2-2.8-4.5-2.8-4.6c-0.9,0-1.2-1.1-0.2-2c1.2-1.1,1.2-1.4,0.1-4.4c-1.1-3-4.9-1.8-7.2-1.6c-2.4,0.1-5.2,1.1-7.7-0.3c-2.5-1.4-5.4,0.6-9.6,2.1s-5.4-0.5-7.8-2.5c-2.3-2-9-6.1-12.4-8.8s-13.4-7.3-14.4-7.6s-1.4,0.3-2.4,2s-5.5-1-6.9-2.6c-1.5-1.5-3.8-4.4-5-5c-1.3-0.5-3.1-1.6-3.6-3.8c-0.5-2.1-1.6-0.3-2.1,0.8c-0.5,1-2.2,1.8-2.4-0.8c-0.2-2.6-1.5-0.5-1.7,0.8s-2.5,0-3.2-1c-0.8-1-5.7,0.3-7.6,0.8c-1.9,0.4-5-1.4-6.7-2.9s-1.9,3.4-2,5.3s-1.4,4.2-1.4,6.1c0,1.9-0.4,2.7-1.7,3.7c-1.3,0.9-1,1.5-0.3,2.2c0.8,0.7,0.9,1.6-1.2,3.1s-0.7,2.6,0.6,3.5c1.3,0.9,0.8,2.6-1.2,3.6s-0.9,1.5,0.3,3.6c1.2,2.1,1.5,3.8-0.6,5.2c-2.1,1.5,0.3,2.1,1.6,2.3s1,0.1,1,1.9c0,1.8-1.6,2.6-4.2,3.2c-2.6,0.5-1,4.3,0,6.3c1,2.1,0.5,3.8-0.9,5c-1.5,1.2-0.6,2.4,0.8,4c0.2,0.3,0.3,0.5,0.3,0.7c1.4,0.1,6.4,0.9,8.6,4.2c2.6,3.9,5,7.6,4.9,10s-3.7,5.2,1.1,4.7c4.8-0.5,9.9,0.7,11-1.1c1.1-1.8,2.1-1.2,4.2-1.2c0.3,0,0.7,0,1-0.1c-0.8-2.1,4.9-6.5,6-7.5c1.2-1,1.3-2.3-0.7-2.5c-2-0.1-4.2-5.4-1.1-8.6c3.1-3.1,1.3-6.4,0-8.8s0.7-4,3.4-4.3c2.7-0.3,2.2-3.9,4.9-6c2.7-2.1,2.5,2.1,2.5,4.5s3,1.5,5.1,0.3s4.8,4,6.7,6c1.9,1.9-2.8,8.5-6,10c-3.1,1.5,0.1,4.9,1.2,6.9c1,1.9,2.4,4,4.8,0.9s7.8-1.6,10.9-2.5s8.5,0.4,11.2-0.7c2.7-1.2,4.5,3.1,7.3,3.1s5.4,0.7,7,4s-7.7,13-10.1,14.6c-2.5,1.6-7.9,4.2-10.4,6s-5,4.4-5.3,6.3c-0.1,0.6-0.6,1.4-1.2,2l0.1-0.1l0,0l0,0l0,0c2.6,2,2,6.7,1.6,8.3c-0.5,1.6-0.6,5.8-0.6,8.4s-1,4.6-1.8,6.2c-0.8,1.5-0.8,4,1.2,5.5s6.1,3.2,8.7,1.8s2.4-4.5,2.8-7.3c0.3-2.8,7.8-5.3,10.7-6.2c2.9-0.9,7.6-2.4,10.5-2.4s3.5-2.2,7.2-3.4c3.3-1.1,4.3-0.7,5.9,1.2c4.2-3.1,2.3-7.7,0.6-10.9c-1.7-3.2-0.3-2.2,0.9-3.3c1.2-1.1,1-2.2-0.5-4.1s-3-3.5-5.6-5.1s-1.8-4.1-0.6-6.8c1.2-2.7,1.9-4.1-0.3-8C520.6,95,523.2,93.5,524.7,92z"/>
+<path class="map-city" name="鹤壁市" id="HEBI" d="M488.5,116.9c2.5-1.8,7.9-4.4,10.4-6s11.8-11.4,10.1-14.6c-1.6-3.3-4.2-4-7-4s-4.6-4.3-7.3-3.1c-2.7,1.2-8-0.2-11.2,0.7c-3.1,0.9-8.5-0.6-10.9,2.5s-3.7,1-4.8-0.9c-1-1.9-4.3-5.4-1.2-6.9c3.1-1.5,7.9-8.1,6-10s-4.6-7.2-6.7-6s-5.1,2.1-5.1-0.3s0.1-6.6-2.5-4.5c-2.7,2.1-2.2,5.7-4.9,6c-2.7,0.3-4.8,1.9-3.4,4.3c1.3,2.4,3.1,5.7,0,8.8c-3.1,3.1-0.9,8.5,1.1,8.6s1.9,1.5,0.7,2.5c-1.1,1-6.8,5.4-6,7.5c2-0.3,4.2-1.2,4.6,1.3c0.5,2.9,1.1,3.4,0.9,7.4c-0.1,4-0.6,4.6,2.5,5.7c3,1.2,7.1,5.3,9.7,6s5.9-1.8,7.2,2.7c1.4,4.5,5,3.3,7,3c1.2-0.2,3.1-1.2,4.3-2.4c0.6-0.6,1.1-1.4,1.2-2C483.5,121.3,486.1,118.7,488.5,116.9z"/>
+<path class="map-city" name="洛阳市" id="LUOYANG" d="M298.7,311.7c3.7-0.3,5.3,0.7,7.7-0.7c1.7-1,2.6-2.6,3.7-4.3c0.8-1.3,2.1-3.6,2.3-6.7c0.3-4.2-1.8-5.5-0.7-8c0.8-1.7,1.9-1.3,4.3-3.7c0.7-0.7,3.7-3.7,4.3-8c0.3-2.3-0.2-4.1-1-7c-0.2-0.8-1.1-3.7-3-7.3c-2.1-4-3.4-4.9-3-6.7c0.4-1.8,2-2.8,3.3-3.7c3.5-2.2,6-1.7,9-2.7c2.3-0.8,3.9-2.1,5.1-3.5c-0.1-0.1-0.3-0.2-0.4-0.3c-1-0.9-0.4-4.3-0.1-6.1c0.2-1.8,0.8-5.1,0.7-7.2s1.2-2,3.7-2.2c2.5-0.2,2.8,1.1,4,1.8c1.2,0.7,3.1,0.8,4.3,0.5c1.2-0.3,3.4,0.5,5.2,0.6c1.8,0.1,1.6-4.3,1.6-5.9c0-1.7,3.5-0.6,4.5-1c1-0.4-3.3-1.4-5.7-1.8c-2.4-0.3-4.3-1.9-5.2-2.6c-0.9-0.6-2.2-1.8-2.2-4.2c0-2.4-1.2-6.1-1.8-7.7c-0.6-1.6,0.8-3.4,2-3.3c1.2,0.2,5.1-0.3,6.4-1s-0.6-4.2-0.9-6.3c-0.2-2.2-1.6-1.2-5.4-0.5c-3.5,0.7-3.3-2.6-3.2-3.1c-1.6,0.2-2.8-0.2-3.5-1.1c-1.2-1.5-2.6-1.2-4.5-1.1c-1.8,0.1-5.7-2.3-7-3.3c-1.1-0.9-1.5-8.1-3.6-9.7c-0.2-0.2-2.4,0-3.5,1.4c-3.2,4,0.8,4.7-3.5,2.5c-2.1-1.1-5.2-1.4-6.4-1.4c-1.5,0-4.5-0.6-6.7-1c-2.2-0.3-3.1-3-4.7-1.7c-1.6,1.3-2.9-1.1-3.8-2.4c-0.9-1.3-1.2-1.2-2.2,1.4c-1,2.6-1.8,0.5-2.4-0.6c-0.6-1.1-1.4-2.2-3.1-2.2c-1.7,0.1-3.8-2.9-5.1-4.8c-1.3-2-4.7-1.7-8.2-1.5c-3,0.2-2.8-1.8-2.7-2.3c-0.1-0.1-0.1-0.2-0.2-0.3c-0.6-1.2-0.4-2.2-3-2.2c-0.6,0-1.1,0-1.5-0.1c-0.9,0.9-5.4,5.4-3.6,5.4c2,0,4.8,2.1,2.9,2.6c-2,0.6-2.2,1.8-1.4,2.5c0.8,0.7,3.6-1.1,2.2,0.6c-1.4,1.6-2.3,2.6-4.8,3.4c-2.5,0.8-3.1,1-3.5,2.6c-0.4,1.6,0,1.9,1.6,1.9c1.6,0,3.8,2.2,5.5,2.2s3,0.9,2,1.9s-1.4,1.1,0.4,2.6c1.9,1.5,3.7,4.1,2.7,6c-1,2-1.6,3.6-1.8,5.5c-0.1,1.9-1.6,4.8-3,7c-1.4,2.2-2.4,3.9-2.6,5.2s-0.5,3.3-2.2,1.5s-4.5-3.9-4.9-2.8c-0.4,1.1,0.9,1.8-1.4,2c-2.3,0.2-3.6-1.2-4.6,0.3s-1.6,2.8-3.1,2.8s-2.6-2.8-3.6-1.6c-1.1,1.2,0,2.9-2.6,2.6c-2.6-0.3-4.7,0.7-4.1,1.9c0.7,1.2,2,2,0.8,2c-1.2,0-9.9-3.2-11.4-2.2s-5.1,0.1-5.5,2.2c-0.3,2.1-1.2,3.5-4.4,4.7c-3.1,1.2-7.1,3.2-9.3,3.2c-2.3,0-5.1-1.1-6.8,0.1c-1.7,1.2-4.1,0.7-4.4,2.1c-0.3,1.5-1.1,1.8-2.4,1.8c-1.4,0-2.9,1.3-3.6,2.5c-0.7,1.2-4.2,1.1-2.9,2.7c1.3,1.6,2.2,2,3.9,3.8c1.7,1.9,2.9,0.5,1.8,5.6c-1.1,5.2,0.3,6.1-1.2,7.4c-1.6,1.3-2,2-0.2,2.7s6.9,3.8,8.9,5.5s2.4,2,3.8,4.1c1.4,2,1.6,2.4,3.8,2c2.2-0.3,2.5,0.4,1.6,2c-1,1.6-2.4,2.6-1.9,5.5c0.5,2.9,1.8,6.2,0.1,7.5c-1.7,1.3-3.9,4.1-6.6,5.2c-2.8,1.1-4.9,3.2-4.1,5.5c0.8,2.2,2.2,8.6,3.4,10.2c1.2,0.5,2.2,0.9,2.9,1c1.7,0.2,5.4-1.6,7,0.2c1.6,1.8,4.5,3.3,7.5,3.5s8.1,0.6,10.6,1.6c2.6,1,6.7,1,7.8,3.1c1.1,2.1,1.8,1.3,3.7,1.4c1.9,0.1,10.4,4.6,10.9,6.5c0.4,1.9-2.2,6.3,1.9,6.8c4.1,0.4,5.1,1.1,5.9,1.9s1.9,0.4,4.6-0.9s5-3.3,5-4.8c0-1.4,1.1-2.2,2.9,0s3.6,3.6,4,1.1c0.4-2.4-0.9-1.9-1.9-4.5c-1-2.6-0.3-4.8,0.9-6.1c1.2-1.3,4-5.6,5.5-4.4s2.1,2.6,4.8,2.6c1.4,0,4.1-0.1,6.4,0.2c0-0.9,0.2-1.9,0.7-2.8C289.2,313.6,294.9,311.9,298.7,311.7z"/>
+<path class="map-city" name="平顶山市" id="PINGDINGSHAN" d="M290.9,322.1c0.8,2.5,3.2,5,6.2,4c3-1.1,4.6-3.4,5.5-0.7c0.9,2.7,4.7,2.1,5.8,4.4c1.2,2.3,2.8,7.2,4.8,4.6c2.1-2.5,1.6-4.8,4.8-1.8s8.8,1.2,12.5,3s4.6,2.3,8.1,0.2c3.5-2.1,5.3-5.5,7.8-3.5c2.5,2.1,11.3,4.4,12.9,6.9c1.6,2.5,4.8,2.3,6,6.2s0.9,6.5,3.7,6.5c2.8,0,2.5-0.2,4.8,2.8s1.4,5.3,5.5,6.5c4.2,1.2,4,0.1,5.5-0.3c1.5-0.4,3.3,0.3,5,1.7s3,6.5,3,9.3c-0.1,2.8-2.1,3.2-1.1,6.5c0.5,1.6,1.2,4.5,1.6,7.2c1.2-0.5,8.3-3.2,10.8-2.9c2.7,0.3,11.9,2,11.9,0.3c-0.1-1.6-1.3-0.7-2.5-4.3c-1.2-3.6-2.2-10.2-1-12.1c1.2-1.9,2.3-3.8,2.2-5.5s0.2-3.1,1.3-3.9c1.1-0.8,2.1-1.6,1.7-3c0-0.2,0-0.3,0-0.5c-0.3,0.1-1.4,0.2-2-0.4c-0.8-0.7-4.8-0.8-5.8-0.7c-1,0.1-3.4-0.8-4.4,0.4s-1.9,1.6-4,0.4c-2.1-1.2-5.5-1-4.7-2.8s0.4-4.2,2.2-5.6c1.8-1.3,3.6-3.6,3.8-5.5c0.2-1.9,2.1-4,3.7-4.8c1.6-0.7,4-2.6,4.1-4.9c0.1-2.3-2.7-5.2-1.4-5.8c0.8-0.4,2-0.6,3.4-1c-0.1-0.1-0.3-0.3-0.6-0.4c-1-0.6-2.4,0.9-2.8-0.1c-0.4-1-2.1-3.1-2.9-4.7c-0.7-1.6-4.4,0-5.9,0.2s-4.7-0.9-7.6-6c-2.9-5.1-1.8-17-1.3-19.5s0-5.9-1.8-6.4s-5-2.7-6.7-4.6c-1.8-1.8-3.2-4.8-4.5-4.2s-3.8,1.6-6,1.9s-4.7-1.8-6.2-3.3s-2.1-5.4-2.1-7.4s-0.7-2.7-2.3-3.8c-1.7-1.1,0.7-4.1,0.5-5.8c-0.1-1.7-2.1-1.3-4.2-1.3c-2.1,0-2.2-2.1-5.1-2.3c-2.9-0.1-5.3,1.5-9.2,1.5c-3.9,0.1-3.3-2.3-3.3-3.8s-3.4-1.5-4.5-1.3c-1,0.2-4-1.3-5.3-2.2c-1.2,1.4-2.8,2.8-5.1,3.5c-3,1-5.5,0.4-9,2.7c-1.3,0.9-3,1.9-3.3,3.7c-0.4,1.8,0.9,2.7,3,6.7c1.9,3.7,2.8,6.5,3,7.3c0.8,2.9,1.3,4.7,1,7c-0.6,4.3-3.6,7.3-4.3,8c-2.4,2.4-3.5,1.9-4.3,3.7c-1.1,2.5,1,3.8,0.7,8c-0.2,3.1-1.6,5.4-2.3,6.7c-1,1.8-1.9,3.3-3.7,4.3c-2.4,1.4-4,0.4-7.7,0.7c-3.8,0.3-9.4,1.9-11.3,5.7c-0.5,0.9-0.7,1.9-0.7,2.8C288.7,320.4,290.5,320.9,290.9,322.1z"/>
+<path class="map-city" name="许昌市" id="XUCHANG" d="M468,309.5c1.5-1,1.9-2.7,2.2-3.8c1.1-3.7-0.4-7.1-1.8-10.3c-0.4-0.9-1.1-2.3-2.5-5c-1.7-3.3-2-3.6-2.2-4.8c-0.2-0.9-1-3.9,0.5-6.5c0.8-1.4,1.4-1.2,2.2-2.8c0.1-0.2,1.2-2.3,0.8-4.8c-0.4-2.2-1.6-3.1-2.5-4.5c-1-1.6-1.1-3.4-0.9-5.3c-1.1,0.9-2,2.4-3.9,3.1c-2.7,0.9-4.6-0.4-5.4-2.3c-0.9-1.9-1.6-1.4-3.8-1.1c-2.1,0.3-3-0.1-3.7-1.1s-1.3-1.7-2.8-2.1c-1.5-0.4-2.4-1.6-3.2-3.1c-0.9-1.5-2.4-1.3-3.8-2.4c-0.4-0.3-0.6-0.7-0.7-1.1c-0.2,0.1-0.7,0.2-1.6,0.1c-1.3-0.1-4-0.4-6.1,0.5c-2.1,1-4.2,0.7-6.4,1.4c-2.2,0.7-2.8,3.5-4.8,4.3s-3.5,0-4.9-2.1c-1.4-2.1-4.1-3.4-5.5-2.2c-1.4,1.1-2.1,0.6-4.1-1.3c-2-1.8-3.2-2.7-5.2-1.5c-2,1.1-4.3-0.3-5.2-2.5c-0.8-2.2-2.5-2.1-5.2-4.3c-2.7-2.2-3.2-1.5-3.5,1.8c-0.3,3.4-4.1,5-6.3,5c-2.2,0-4.3,2-5.9,4.3c-1.5,2.4-1.1,4.2-3.2,2.9c-1.9-1.1-5.8-0.5-6.7-0.4c0.2,0.2,0.3,0.4,0.3,0.7c0.1,1.7-2.2,4.7-0.5,5.8c1.7,1.1,2.3,1.8,2.3,3.8s0.6,5.9,2.1,7.4s4,3.6,6.2,3.3s4.7-1.3,6-1.9c1.3-0.6,2.7,2.3,4.5,4.2c1.8,1.8,4.9,4.1,6.7,4.6c1.8,0.5,2.3,3.9,1.8,6.4s-1.6,14.4,1.3,19.5c2.9,5.1,6.1,6.2,7.6,6s5.1-1.8,5.9-0.2c0.7,1.6,2.5,3.6,2.9,4.7c0.4,1,1.8-0.4,2.8,0.1c0.7,0.4,0.7,0.8,0.7,1c0.8-0.2,1.6-0.4,2.3-0.7c2.1-0.9,4.1,0.2,5.5,0.6c1.5,0.5,3,0,3.6-1.5c0.6-1.5-4.5-3.8-3.7-5.9c0.8-2.1,2.3-5.5,1.8-7.3c-0.4-1.8-1.6-4.3-0.2-5.7c1.3-1.4,3.7-0.9,4.7-2.1c1-1.3,2.5-1.7,3.8-0.2c1.3,1.5,3,2.1,3.5-0.5c0.5-2.6,1.1-3.8,1.9-4.9c0.8-1.1,2.8-1.9,4.8-3.5c2-1.6,6.6-3.2,7.9-2.1c1.3,1.1,3.3,3.6,5.3,3.8c2.1,0.1,5.4,1.7,5.4,5.1c0,3.4-2.4,4.9-0.2,7c1.7,1.7,2.4,2.7,2.1,4C463.7,309.9,465.9,311,468,309.5z"/>
+<path class="map-city" name="周口市" id="ZHOUKOU" d="M457.6,317.1c-0.5,1.7-2.1,4.2-1.1,5.9c1,1.6,0.4,4.6,2.5,3.9c2.1-0.8,4.4-4,5.9-4.2s2.9-1.1,4.2-2.4c1.3-1.3,0.9,2,1.6,3.7s-0.3,5.3,1.1,6.5c1.4,1.2,1.2,1.8,1.2,3.7s0.3,3,1.2,4.4c0.9,1.2-0.5,4.5-1.3,6.1c0.4-0.2,0.8-0.1,1.4,0.4c2.3,1.8,5.4,4.1,7.7,3.3c2.3-0.8,6.3-1.7,7.6-0.1c1.3,1.6,1.6,2,3.3,2.3c1.7,0.3,2.6,0.8,3.2,2.9c0.6,2.2,0.6,6.7,2.5,7.7c1.9,1,2.5-2.2,3.9-0.9c1.4,1.3,0.8,2.6,3.4,3.3c2.6,0.7,4,1.7,4.2,3.6c0.2,1.9,0.2,5.6-1.5,6.7c-1.7,1.2-2.4,3.6-1.6,5.3c0.8,1.7,1,3.3,3.3,5s3.6,1.7,3.7,3.2s2.6,1.9,5.3,2.2s1.4-1.6,3.6-0.8c1.6,0.5,2.4,0.5,2.7,0.5c-0.4-1.5-0.3-2.7,0.1-3.6c0.5-1.3,2.5-4.2,5.2-4.2s2.3,3.2,2.5,4.7s3,2.9,5.3,3c2.3,0.1,6.8,0.9,9.1,0.5c2.4-0.4,3.9-1.9,4.1-3.4s5.7-2.3,8.1-2.4c2.5-0.1,2.5-1.6,1.5-3.8c-1-2.2,1.8-4.6,3.3-5.7c1.5-1.1,0.7-3.4,0.7-5c0-1.6,0-2,2.2-4.2s-0.2-5.1-2.3-6.8c-2.1-1.7-1.6-2.5-0.7-4.1c0.9-1.6,0-1.9-0.6-2.8c-0.6-0.9-0.8-1.7,1.2-2.8s1.4-2.9,1.4-4.8c0-1.9,1.6-2.6,3.6-1.9s1.4-1.6,1.4-3.7c0-2.1,2.5-2.3,3.7-3.4c1.2-1.1,4.9,0.8,7.8,0.8s4.1,0.1,4.8-1.3c0.7-1.4,2.8-1.6,4.2-1.9s-1.3-6.6-2.6-8.2c-1.3-1.7,0-2.6,0.1-5.8c0.1-3.2-1.3-2.8-3.1-4.7c-1.7-1.2,1-1,3.2-1.4c2.2-0.4,3.3-7.6,3-9.2c-0.3-1.7-3-2.1-5.7-1.6c-2.8,0.5-0.7-1.9-0.6-4.6c0.1-2.6,1.1-5.4,2-9c0.8-3,3.9-5.1,6.1-6.6c-0.2-0.1-1.9-1.4-3.8-1.8c-2-0.4-3.7,0.4-5.6-0.1c-1.9-0.4-1.6,1.1-1.8,3.3c-0.1,2.2-0.3,2.5-3.5,3.1c-3.2,0.6-2,1.9-3.2,3.5c-1.2,1.7-6.5-0.8-8-2.1c-1.4-1.3-2.1,0.1-2.8,1c-0.7,0.9-1.4,1.4-3.8,0.5c-2.4-0.9-1.7,0.2-4.4,0.9c-2.7,0.6-3.1,1.4-5,3.1c-1.8,1.7-2.7,1.6-4.8,1.1c-2-0.5-1.8,0.6-2.9,2.1c-1.1,1.5-0.6,1.7-2,1.7s-2.4-5.3-2.4-7.5s1.9-3.1,3.4-4.2c1.5-1,1.3-3.9,0.6-5.1s0.1-10.5,0.1-12.6c0-2.1,0-2.3-1.5-3.7c-1.5-1.5-5.5-1.2-6.6-2.7s-3.7-1.9-5.4-1.9s-2.5-0.8-3.4-2.4c-0.8-1.5-2.5-2.1-4.2-3.1c0.2,0.5,0.6,2-1.6,2.1c-2.6,0.1-3.6,0.4-5.3,1.2c-1.7,0.8-3.8,2.3-5.3,3.9c-1.5,1.6-3,0.9-5.3,1c-2.3,0.1-3.8-2.7-6.9-2.7c-3,0-4.9-2.5-6.7-3.5s-4.1-3.5-6-3.4c-1.9,0.1-2.1,0.9-2,2.3c0.1,1.5,0.3,2.1-1.4,4.7c-1.7,2.6-7.6-1.1-8.9-1.8s-3.4-0.4-3.8,1.5c-0.4,1.9-3.1,1.4-5,1.5c-0.6,0-1.1,0.3-1.6,0.7c-0.2,1.9,0,3.7,0.9,5.3c0.9,1.4,2.1,2.3,2.5,4.5c0.4,2.4-0.6,4.5-0.8,4.8c-0.8,1.6-1.4,1.3-2.2,2.8c-1.5,2.6-0.7,5.6-0.5,6.5c0.3,1.1,0.5,1.4,2.2,4.8c1.4,2.7,2.1,4.1,2.5,5c1.3,3.1,2.8,6.6,1.8,10.3c-0.3,1.1-0.8,2.7-2.2,3.8c-2.1,1.5-4.3,0.4-6.6,0.1c-0.1,0.3-0.2,0.7-0.3,1.1C460.2,312.7,458.1,315.3,457.6,317.1z"/>
+</svg>
+                    <div class="map-tooltip" id="mapTooltip"></div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            <span>Scroll</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section id="overview">
+        <div class="container">
+            <div class="section-label reveal-text">Overview</div>
+            <h2 class="section-title reveal-text">十年总览：<em>产能演变的时间脉络</em></h2>
+
+            <div class="stats-grid">
+                <div class="stat-card"><span class="stat-icon">&#127806;</span><div class="stat-value" data-count="808.27">+0</div><div class="stat-label">粮食总产十年变化<br><span style="color:var(--ink-faint)">5946→6754万吨</span></div></div>
+                <div class="stat-card"><span class="stat-icon">&#128200;</span><div class="stat-value" data-count="35.3">+0</div><div class="stat-label">粮食单产十年变化<br><span style="color:var(--ink-faint)">383→419公斤/亩</span></div></div>
+                <div class="stat-card"><span class="stat-icon">&#127941;</span><div class="stat-value" data-count="487.1">+0</div><div class="stat-label">播种面积十年变化<br><span style="color:var(--ink-faint)">10286→10773千公顷</span></div></div>
+                <div class="stat-card"><span class="stat-icon">&#9889;</span><div class="stat-value" data-count="2488">+0</div><div class="stat-label">高标准农田十年变化<br><span style="color:var(--ink-faint)">6320→8808万亩</span></div></div>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">河南省粮食总产量变化趋势（2016-2025年）</div><div class="chart-note">单位：万吨</div></div>
+                <div id="productionTrend" style="height: 380px;"></div>
+            </div>
+
+            <div class="carousel-section">
+                <div class="chart-header"><div class="chart-title">年度数据深度解析（左右滑动查看）</div></div>
+                <div class="carousel-wrapper" id="yearCarousel">
+                    <div class="carousel-track" id="yearTrack">
+                        <div class="carousel-slide"><div class="carousel-year-badge">2016</div><div class="carousel-chart" id="yearChart0"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">5946.6</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">383.2</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10286</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">6320</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2017</div><div class="carousel-chart" id="yearChart1"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">5973.4</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">392.8</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10136</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">6910</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2018</div><div class="carousel-chart" id="yearChart2"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6648.9</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">395.2</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10906</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">5957</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2019</div><div class="carousel-chart" id="yearChart3"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6695.4</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">415.8</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10735</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">7000</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2020</div><div class="carousel-chart" id="yearChart4"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6825.8</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">418.0</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10739</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">6830</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2021</div><div class="carousel-chart" id="yearChart5"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6544.2</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">405.0</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10772</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">7580</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2022</div><div class="carousel-chart" id="yearChart6"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6789.4</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">419.9</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10778</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">8330</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2023</div><div class="carousel-chart" id="yearChart7"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6624.3</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">409.5</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10785</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">8585</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2024</div><div class="carousel-chart" id="yearChart8"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6719.4</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">415.7</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10777</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">8808</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                        <div class="carousel-slide"><div class="carousel-year-badge">2025</div><div class="carousel-chart" id="yearChart9"></div><div class="carousel-stats"><div class="carousel-stat-item"><div class="value">6754.9</div><div class="label">粮食总产（万吨）</div></div><div class="carousel-stat-item"><div class="value">418.5</div><div class="label">单产（公斤/亩）</div></div><div class="carousel-stat-item"><div class="value">10773</div><div class="label">播种面积（千公顷）</div></div><div class="carousel-stat-item"><div class="value">8808</div><div class="label">高标准农田（万亩）</div></div></div></div>
+                    </div>
+                    <div class="carousel-nav prev" id="carouselPrev">&#8249;</div>
+                    <div class="carousel-nav next" id="carouselNext">&#8250;</div>
+                </div>
+                <div class="carousel-indicators" id="carouselIndicators"></div>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item reveal-text"><div class="timeline-year">2016-2017</div><div class="timeline-desc">产量从5946.60万吨增至5973.40万吨，稳中有进，夯实了粮食安全的基础底盘。</div></div>
+                <div class="timeline-item reveal-text"><div class="timeline-year">2018</div><div class="timeline-desc">产量大幅跃升至6648.91万吨，增速达11.36%，实现历史性跨越。</div></div>
+                <div class="timeline-item reveal-text"><div class="timeline-year">2020</div><div class="timeline-desc">达到十年峰值6825.80万吨，增速2.25%，彰显中原粮仓的雄厚实力。</div></div>
+                <div class="timeline-item reveal-text"><div class="timeline-year">2021</div><div class="timeline-desc">受历史罕见的特大暴雨灾害冲击，产量回落至6544.19万吨（-4.13%），但仍守住6500万吨底线。</div></div>
+                <div class="timeline-item reveal-text"><div class="timeline-year">2022</div><div class="timeline-desc">V型反弹！产量迅速回升至6789.37万吨，恢复至灾前99%以上水平，展现强大修复韧性。</div></div>
+                <div class="timeline-item reveal-text"><div class="timeline-year">2025</div><div class="timeline-desc">产量回升至6754.87万吨，平稳收官站上新基点，十年累计增产808.27万吨。</div></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>从整体趋势看，2016-2025年河南省粮食总产量<span class="highlight">整体呈稳步上升态势</span>。十年间累计增产808.27万吨，年均增速约1.3%。2020年总产量达到十年最高值6825.80万吨，2021年受暴雨灾害因素影响出现小幅波动，但河南省粮食总产量已连续6年稳定在6500万吨以上，粮食安全保障能力持续增强。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-warm" id="crop">
+        <div class="container">
+            <div class="section-label reveal-text">Crop Structure</div>
+            <h2 class="section-title reveal-text">作物结构：<em>夏粮与秋粮的协同发展</em></h2>
+
+            <div class="prose lead reveal-text">
+                <p>河南省粮食生产以<span class="highlight">小麦</span>和<span class="highlight">玉米</span>为主导，形成了"夏粮以小麦为主、秋粮以玉米为主"的种植结构。十年来，夏粮始终占据总产量的55%以上，是河南粮食安全的压舱石。</p>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">夏粮与秋粮产量变化趋势（2016-2025年）</div><div class="chart-note">单位：万吨</div></div>
+                <div id="summerAutumn" style="height: 380px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>数据显示，十年来夏粮产量从3418.60万吨增至3808.70万吨，增长11.41%；秋粮产量从2528.00万吨增至2946.17万吨，增长16.54%。<span class="highlight">秋粮增速略高于夏粮</span>，主要得益于玉米单产的持续提升和水稻种植面积的适度扩大。</p>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">小麦与玉米产量对比（2016-2025年）</div><div class="chart-note">单位：万吨</div></div>
+                <div id="wheatCorn" style="height: 380px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>作为全国小麦第一大省，河南小麦产量占全国四分之一以上。十年来，<span class="highlight">小麦产量</span>从3418.60万吨增至3808.70万吨，<span class="highlight">玉米产量</span>从2110.00万吨增至2580.00万吨。两大主粮协同发展，共同支撑起中原粮仓的稳固根基。</p>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">小麦与玉米单产变化趋势（2016-2025年）</div><div class="chart-note">单位：公斤/亩</div></div>
+                <div id="yieldComparison" style="height: 380px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>单产方面，小麦单产从2016年的<span class="highlight">432.5公斤/亩</span>提升至2025年的<span class="highlight">472.8公斤/亩</span>，增长9.32%；玉米单产从<span class="highlight">356.2公斤/亩</span>提升至<span class="highlight">398.5公斤/亩</span>，增长11.88%。<span class="highlight">玉米单产增速更快</span>，显示出秋粮生产的巨大潜力。</p>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>从作物结构变化来看，河南省粮食生产呈现以下特点：一是<span class="highlight">小麦优势地位稳固</span>，作为夏粮绝对主力，十年间占比稳定在56%-57%；二是<span class="highlight">玉米发展势头强劲</span>，产量占比从35.5%提升至38.2%；三是<span class="highlight">水稻等特色作物稳步发展</span>，丰富了粮食供给结构。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="spatial">
+        <div class="container">
+            <div class="section-label reveal-text">Spatial Distribution</div>
+            <h2 class="section-title reveal-text">空间透视：<em>各地市产能分布格局</em></h2>
+
+            <div class="prose lead reveal-text">
+                <p>河南省18个地市粮食产能分布呈现明显的区域特征。<span class="highlight">"豫东扛鼎、豫南跟进、豫北支撑"</span>的产能格局十年基本稳定，产能向优势产区持续集中，<span class="highlight">前五名地市产量占全省半壁江山</span>。</p>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">2025年各地市粮食产量排名</div><div class="chart-note">单位：万吨</div></div>
+                <div id="cityRanking" style="height: 480px;"></div>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">各地市粮食产量占比（2025年）</div></div>
+                <div id="cityPie" style="height: 400px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>从排名可以看出，<span class="highlight">周口市</span>以918.49万吨稳居第一，占全省总产量的13.6%；<span class="highlight">驻马店市</span>（807.00万吨）和<span class="highlight">商丘市</span>（714.47万吨）分列二、三位。前五大主产市（周口、驻马店、商丘、南阳、信阳）的粮食产量占全省总量的<span class="highlight">55%以上</span>，核心产区的支撑作用十分突出。</p>
+            </div>
+
+            <div class="carousel-section">
+                <div class="chart-header"><div class="chart-title">各地市十年产能变化（左右滑动查看）</div><div class="chart-note">单位：万吨</div></div>
+                <div class="carousel-wrapper" id="cityCarousel">
+                    <div class="carousel-track" id="cityTrack">
+                    </div>
+                    <div class="carousel-nav prev" id="cityCarouselPrev">&#8249;</div>
+                    <div class="carousel-nav next" id="cityCarouselNext">&#8250;</div>
+                </div>
+                <div class="carousel-indicators" id="cityCarouselIndicators"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>十年间，各地市产能呈现差异化发展。<span class="highlight">周口市</span>产量增长最为显著，从805.8万吨增至918.5万吨，累计增长112.7万吨；<span class="highlight">郑州市</span>、<span class="highlight">洛阳市</span>等地市受城镇化影响，产能占比略有下降。豫东（周口、商丘、驻马店）、豫北（新乡、安阳）传统农业地市长期占据产能前列，十年间核心主产区格局基本稳定。</p>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>全省粮食产能区域分化明显，前5名地市总产量占全省比重超过55%，核心产区支撑作用突出。这一格局既体现了河南粮食生产的规模优势，也反映出区域发展不平衡的现实挑战。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-warm" id="drivers">
+        <div class="container">
+            <div class="section-label reveal-text">Drivers of Growth</div>
+            <h2 class="section-title reveal-text">拆解动因：<em>产能增长的核心支撑</em></h2>
+
+            <div class="prose lead reveal-text">
+                <p>粮食产量的增长，离不开"藏粮于地"和"藏粮于技"两大战略的支撑。我们从耕地资源保障、生产效率提升、农业现代化推进三个维度拆解产能增长的核心动因。</p>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">粮食播种面积与单产变化（2016-2025年）</div></div>
+                <div id="areaYield" style="height: 380px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>数据显示，十年间河南省粮食播种面积从2016年的<span class="highlight">10286.15千公顷</span>变化至2025年的<span class="highlight">10773.25千公顷</span>，整体<span class="highlight">基本稳定</span>，说明依靠扩大耕地面积增产的空间有限。而粮食单产从2016年的<span class="highlight">383.2公斤/亩</span>提升至2025年的<span class="highlight">418.5公斤/亩</span>，累计增长<span class="highlight">9.21%</span>。这表明：<span class="highlight">产能增长主要依靠单产提升</span>，农业现代化成效显著。</p>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">耕地面积与高标准农田建设（2016-2025年）</div></div>
+                <div id="farmland" style="height: 380px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>耕地保护是粮食安全的根本。十年来，河南省耕地面积基本稳定在<span class="highlight">1.2亿亩</span>左右，牢牢守住了国家下达的耕地红线。与此同时，<span class="highlight">高标准农田</span>建设突飞猛进，从6320万亩增至8808万亩，<span class="highlight">增长39.4%</span>，超七成耕地实现了"田成方、渠相通、路相连、旱能灌、涝能排"。高标准农田建设和农业机械化水平提高是推动单产提升的重要因素。</p>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">农业现代化配套指标（2016-2025年）</div></div>
+                <div id="modernization" style="height: 380px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>农业机械化水平持续提升，<span class="highlight">农业机械总动力</span>从9854.96万千瓦增至11288.34万千瓦，增幅14.54%。与此同时，<span class="highlight">有效灌溉面积</span>稳定在7000万亩以上，化肥施用量逐步优化，实现了产量提升与绿色发展的双赢。</p>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>综合分析可见，河南省粮食产能增长模式已从传统的"靠地增产"转向现代的"靠技提质"。未来，<span class="highlight">科技兴农</span>将成为推动粮食产能持续提升的核心引擎，包括智慧农业、精准种植、良种培育等技术的推广应用。</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="status">
+        <div class="container">
+            <div class="section-label reveal-text">Current Status</div>
+            <h2 class="section-title reveal-text">现状观察：<em>成就与挑战并存</em></h2>
+
+            <div class="status-grid">
+                <div class="status-card success">
+                    <h4>&#127775; 核心成就</h4>
+                    <ul>
+                        <li><strong>底盘牢不可破</strong>十年间产量最低值为2021年的6544万吨，始终牢牢守住6500万吨底线，相当于每年为全国每人提供近50公斤原粮。</li>
+                        <li><strong>韧性超出预期</strong>2021年遭遇历史罕见的特大暴雨灾害，仅用一年时间产量便回升至6789万吨，恢复至灾前99%以上水平。</li>
+                        <li><strong>趋势长期向好</strong>剔除灾害异常年份，十年间产能稳步提升的主线从未改变，累计增产规模相当于新增了一个中型产粮地市的全年产能。</li>
+                        <li><strong>结构不断优化</strong>夏粮、秋粮协同发展，小麦、玉米双轮驱动的格局更加稳固，抗风险能力显著增强。</li>
+                    </ul>
+                </div>
+                <div class="status-card challenge">
+                    <h4>&#9888;&#65039; 四大挑战</h4>
+                    <ul>
+                        <li><strong>单产增速平台期</strong>2016-2020年年均增速约2.4%，而2021-2025年回落至0.8%左右，进一步突破难度加大。</li>
+                        <li><strong>极端天气常态化</strong>从"偶发变量"变为"常态考验"，2021年暴雨、2023年"烂场雨"都对生产造成显著冲击。</li>
+                        <li><strong>种粮效益偏低</strong>农资价格、人工成本持续上涨，"种粮赚头小"仍是困扰农户的现实问题。</li>
+                        <li><strong>区域发展失衡</strong>"产粮越多、负担越重"的矛盾尚未完全破解，主产区利益补偿机制仍需完善。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chart-wrap">
+                <div class="chart-header"><div class="chart-title">粮食产量波动情况（2016-2025年）</div><div class="chart-note">同比增速 %</div></div>
+                <div id="volatility" style="height: 340px;"></div>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>从增速波动来看，十年间产量增速呈现<span class="highlight">"大起大落"</span>的特征。2018年增速高达11.36%，而2021年受暴雨灾害影响增速降至-4.13%。这表明，<span class="highlight">极端天气已成为影响粮食产量的重要变量</span>，增强农业抗灾能力刻不容缓。</p>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>面对当前形势，河南省粮食生产正处于转型升级的关键期。一方面，要巩固已有的产能优势，持续推进高标准农田建设和农业机械化；另一方面，要积极应对气候变化挑战，发展智慧农业和防灾减灾技术，确保粮食安全底线不动摇。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-warm" id="conclusion">
+        <div class="container">
+            <div class="section-label reveal-text">Epilogue</div>
+            <h2 class="section-title reveal-text">总结与展望：<em>筑牢大国粮仓根基</em></h2>
+
+            <div class="prose lead reveal-text">
+                <p>十载春秋，中原大地在田畴之上写下的，既是一份粮食安全的合格答卷，也是一部农业现代化的转型简史。十年间，产能增长了808.27万吨，播种面积基本稳定，但单产提升了9.21%——这一增一稳之间，折射出河南农业从"靠地增产"到"靠技提质"的深刻转型。</p>
+            </div>
+
+            <div class="quote-block">
+                <p>6754.87万吨，从来不是一个冰冷的统计数字。它是豫东农民凌晨下地的晨光，是高标准农田里流淌的灌溉水，是科研人员实验室里熬红的双眼，是千万农机手跨区作业的滚滚车轮。</p>
+            </div>
+
+            <div class="prose reveal-text">
+                <p><span class="highlight">藏粮于地</span>，河南牢牢守住1.2亿亩耕地红线，建成8808万亩高标准农田，让每一寸土地都成为丰收的希望；<span class="highlight">藏粮于技</span>，农业机械化率突破90%，良种覆盖率超过98%，科技成为增产的核心引擎；<span class="highlight">藏粮于民</span>，培育新型经营主体，完善农业保险体系，让农民种粮有盼头、有保障。</p>
+            </div>
+
+            <div class="prose reveal-text">
+                <p>面向未来，中原粮仓仍需应对单产突破、抗灾能力、种粮效益三大挑战。但我们有理由相信，在国家粮食安全战略的指引下，在河南千万农民的辛勤耕耘下，中原粮仓必将持续夯实根基，为端牢中国饭碗贡献更坚实的河南力量。</p>
+            </div>
+
+            <div class="epilogue reveal-text">
+                <p>土地无言，却会记下每一份耕耘。<br>下一个十年，故事仍在黄淮大地上继续书写。</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-title">第十一届中国数据新闻大赛参赛作品</div>
+            <div class="footer-divider"></div>
+            <div class="footer-text">
+                <strong>数说十年中原粮仓：方寸耕地里的产能蜕变</strong><br><br>
+                河南工业大学新闻与传播学院<br><br>
+                指导老师：刘乐格<br>
+                团队成员：刘鸣响 张飞祥 酒毅伟 秦文哲 王鑫杰 魏卓扬<br><br>
+                数据来源：河南省统计局、国家统计局、《河南统计年鉴》、河南省农业农村厅、郑州市统计局、开封市统计局、洛阳市统计局、平顶山市统计局、安阳市统计局、鹤壁市统计局、新乡市统计局、焦作市统计局、濮阳市统计局、许昌市统计局、漯河市统计局、三门峡市统计局、南阳市统计局、商丘市统计局、信阳市统计局、周口市统计局、驻马店市统计局、济源市统计局
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function initProgressBar() {
+            const bar = document.getElementById('progressBar');
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                bar.style.width = (scrollTop / docHeight * 100) + '%';
+            });
+        }
+
+        function initNavbar() {
+            const navbar = document.getElementById('navbar');
+            const toggle = document.getElementById('navbarToggle');
+            const links = document.getElementById('navbarLinks');
+            window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 80));
+            toggle.addEventListener('click', () => links.classList.toggle('show'));
+            links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('show')));
+        }
+
+        function initCharts() {
+            const charts = [];
+
+            const c1 = echarts.init(document.getElementById('productionTrend'));
+            c1.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                grid: { left:'4%', right:'4%', bottom:'6%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: { type:'value', name:'产量（万吨）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}}, min:5800 },
+                series: [{
+                    name:'粮食总产量', type:'line', smooth:false,
+                    data:[5946.60,5973.40,6648.91,6695.36,6825.80,6544.19,6789.37,6624.27,6719.37,6754.87],
+                    lineStyle:{width:3,color:'#1b7a42'}, itemStyle:{color:'#1b7a42',borderWidth:2,borderColor:'#fff'},
+                    areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(27,122,66,0.2)'},{offset:1,color:'rgba(27,122,66,0.02)'}])},
+                    markPoint:{data:[{type:'max',name:'最高',itemStyle:{color:'#bc6c25'},label:{color:'#fff',fontSize:11}},{type:'min',name:'最低',itemStyle:{color:'#2d8a57'},label:{color:'#fff',fontSize:11}}],symbol:'pin',symbolSize:44},
+                    markLine:{data:[{yAxis:6500,lineStyle:{color:'#bc6c25',type:'dashed',width:1},label:{formatter:'6500万吨',color:'#bc6c25',fontSize:11}}],silent:true},
+                    animationDuration:2000, symbolSize:8
+                }]
+            });
+            charts.push(c1);
+
+            const c2 = echarts.init(document.getElementById('summerAutumn'));
+            c2.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                legend: { data:['夏粮产量','秋粮产量'], textStyle:{color:'#4a6a58',fontSize:13}, bottom:0 },
+                grid: { left:'4%', right:'4%', bottom:'12%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: { type:'value', name:'产量（万吨）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}}, min:2300 },
+                series: [
+                    { name:'夏粮产量', type:'line', smooth:false, data:[3418.60,3441.40,3820.77,3882.50,3903.20,3657.09,3820.80,3685.32,3747.87,3808.70], lineStyle:{width:3,color:'#2d8a57'}, itemStyle:{color:'#2d8a57',borderWidth:2,borderColor:'#fff'}, areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(45,138,87,0.2)'},{offset:1,color:'rgba(45,138,87,0.02)'}])}, animationDuration:2000, symbolSize:8 },
+                    { name:'秋粮产量', type:'line', smooth:false, data:[2528.00,2532.00,2828.14,2812.86,2922.60,2887.10,2968.57,2938.95,2971.50,2946.17], lineStyle:{width:3,color:'#bc6c25'}, itemStyle:{color:'#bc6c25',borderWidth:2,borderColor:'#fff'}, areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(188,108,37,0.2)'},{offset:1,color:'rgba(188,108,37,0.02)'}])}, animationDuration:2000, symbolSize:8 }
+                ]
+            });
+            charts.push(c2);
+
+            const c3 = echarts.init(document.getElementById('wheatCorn'));
+            c3.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                legend: { data:['小麦产量','玉米产量'], textStyle:{color:'#4a6a58',fontSize:13}, bottom:0 },
+                grid: { left:'4%', right:'4%', bottom:'12%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: { type:'value', name:'产量（万吨）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}} },
+                series: [
+                    { name:'小麦产量', type:'bar', data:[3418.60,3441.40,3820.77,3882.50,3903.20,3657.09,3820.80,3685.32,3747.87,3808.70], itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2d8a57'},{offset:1,color:'#5cc48e'}]), borderRadius:[6,6,0,0]}, animationDuration:2000 },
+                    { name:'玉米产量', type:'bar', data:[2110.00,2100.00,2450.00,2460.00,2550.00,2480.00,2550.00,2520.00,2560.00,2580.00], itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#bc6c25'},{offset:1,color:'#dda15e'}]), borderRadius:[6,6,0,0]}, animationDuration:2000 }
+                ]
+            });
+            charts.push(c3);
+
+            const c4 = echarts.init(document.getElementById('yieldComparison'));
+            c4.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                legend: { data:['小麦单产','玉米单产'], textStyle:{color:'#4a6a58',fontSize:13}, bottom:0 },
+                grid: { left:'4%', right:'4%', bottom:'12%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: { type:'value', name:'单产（公斤/亩）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}}, min:330 },
+                series: [
+                    { name:'小麦单产', type:'line', smooth:false, data:[432.5,438.2,452.8,462.5,465.8,442.3,458.6,446.2,455.3,472.8], lineStyle:{width:3,color:'#2d8a57'}, itemStyle:{color:'#2d8a57',borderWidth:2,borderColor:'#fff'}, animationDuration:2000, symbolSize:8 },
+                    { name:'玉米单产', type:'line', smooth:false, data:[356.2,362.5,378.6,395.2,402.5,390.8,408.2,398.5,405.6,398.5], lineStyle:{width:3,color:'#bc6c25'}, itemStyle:{color:'#bc6c25',borderWidth:2,borderColor:'#fff'}, animationDuration:2000, symbolSize:8 }
+                ]
+            });
+            charts.push(c4);
+
+            const c5 = echarts.init(document.getElementById('cityRanking'));
+            c5.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                grid: { left:'18%', right:'4%', bottom:'6%', top:'10%', containLabel:true },
+                xAxis: { type:'value', name:'产量（万吨）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}} },
+                yAxis: { type:'category', data:['济源','三门峡','漯河','鹤壁','平顶山','郑州','焦作','洛阳','许昌','开封','安阳','濮阳','信阳','南阳','商丘','驻马店','周口'], axisLine:{show:false}, axisLabel:{color:'#1a1a1a',fontSize:12}, axisTick:{show:false} },
+                series: [{
+                    name:'2025年产量', type:'bar', data:[25.09,91.65,127.56,75.45,187.74,187.74,151.80,230.25,249.60,212.05,306.28,294.90,582.84,668.01,714.47,807.00,918.49],
+                    itemStyle:{color:new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'#5cc48e'},{offset:1,color:'#2d8a57'}]), borderRadius:[0,6,6,0]},
+                    animationDuration:2000
+                }]
+            });
+            charts.push(c5);
+
+            const c6 = echarts.init(document.getElementById('cityPie'));
+            c6.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'item', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1, formatter:p=>p.name+'<br/>'+p.value+'万吨<br/>占比：'+p.percent+'%' },
+                legend: { orient:'vertical', right:'4%', top:'center', textStyle:{color:'#4a6a58',fontSize:12}, itemWidth:12, itemHeight:12 },
+                series: [{
+                    name:'产量占比', type:'pie', radius:['45%','70%'], center:['35%','50%'],
+                    data:[
+                        {value:918.49,name:'周口',itemStyle:{color:'#2d8a57'}},
+                        {value:807.00,name:'驻马店',itemStyle:{color:'#4a9e6d'}},
+                        {value:714.47,name:'商丘',itemStyle:{color:'#bc6c25'}},
+                        {value:668.01,name:'南阳',itemStyle:{color:'#dda15e'}},
+                        {value:582.84,name:'信阳',itemStyle:{color:'#5cc48e'}},
+                        {value:2119.06,name:'其他',itemStyle:{color:'rgba(27,122,66,0.3)'}}
+                    ],
+                    label: { show:true, color:'#1a1a1a', fontSize:11, formatter:'{b}\n{d}%' },
+                    animationDuration:2000
+                }]
+            });
+            charts.push(c6);
+
+            const c7 = echarts.init(document.getElementById('areaYield'));
+            c7.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                legend: { data:['播种面积','粮食单产'], textStyle:{color:'#4a6a58',fontSize:13}, bottom:0 },
+                grid: { left:'4%', right:'4%', bottom:'12%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: [
+                    { type:'value', name:'播种面积（千公顷）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{show:false}, min:10000 },
+                    { type:'value', name:'单产（公斤/亩）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}}, min:370 }
+                ],
+                series: [
+                    { name:'播种面积', type:'line', smooth:false, data:[10286.15,10135.50,10906.08,10734.54,10738.79,10772.31,10778.35,10785.29,10777.13,10773.25], lineStyle:{width:3,color:'#2d8a57'}, itemStyle:{color:'#2d8a57',borderWidth:2,borderColor:'#fff'}, yAxisIndex:0, animationDuration:2000, symbolSize:8 },
+                    { name:'粮食单产', type:'line', smooth:false, data:[383.2,392.8,395.2,415.8,418.0,405.0,419.9,409.5,415.7,418.5], lineStyle:{width:3,color:'#bc6c25'}, itemStyle:{color:'#bc6c25',borderWidth:2,borderColor:'#fff'}, yAxisIndex:1, animationDuration:2000, symbolSize:8 }
+                ]
+            });
+            charts.push(c7);
+
+            const c8 = echarts.init(document.getElementById('farmland'));
+            c8.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                legend: { data:['高标准农田','耕地面积'], textStyle:{color:'#4a6a58',fontSize:13}, bottom:0 },
+                grid: { left:'4%', right:'4%', bottom:'12%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: [
+                    { type:'value', name:'高标准农田（万亩）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{show:false}, min:5500 },
+                    { type:'value', name:'耕地面积（亿亩）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return v.toFixed(2)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}}, min:1.00, max:1.40 }
+                ],
+                series: [
+                    { name:'高标准农田', type:'bar', data:[6320,6910,5957,7000,6830,7580,8330,8585,8808,8808], itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2d8a57'},{offset:1,color:'#5cc48e'}]), borderRadius:[6,6,0,0]}, animationDuration:2000 },
+                    { name:'耕地面积', type:'line', smooth:false, data:[1.22,1.21,1.21,1.20,1.20,1.20,1.20,1.20,1.20,1.20], lineStyle:{width:3,color:'#bc6c25'}, itemStyle:{color:'#bc6c25',borderWidth:2,borderColor:'#fff'}, yAxisIndex:1, animationDuration:2000, symbolSize:8 }
+                ]
+            });
+            charts.push(c8);
+
+            const c9 = echarts.init(document.getElementById('modernization'));
+            c9.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                legend: { data:['农业机械总动力','有效灌溉面积'], textStyle:{color:'#4a6a58',fontSize:13}, bottom:0 },
+                grid: { left:'4%', right:'4%', bottom:'12%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: [
+                    { type:'value', name:'机械总动力（万千瓦）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{show:false}, min:9600 },
+                    { type:'value', name:'灌溉面积（万亩）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}}, min:7000 }
+                ],
+                series: [
+                    { name:'农业机械总动力', type:'line', smooth:false, data:[9854.96,10038.32,10204.46,10356.97,10463.70,10650.20,10860.00,11120.00,11288.34,11288.34], lineStyle:{width:3,color:'#2d8a57'}, itemStyle:{color:'#2d8a57',borderWidth:2,borderColor:'#fff'}, yAxisIndex:0, animationDuration:2000, symbolSize:8 },
+                    { name:'有效灌溉面积', type:'bar', data:[7100,7150,7200,7250,7300,7350,7400,7450,7500,7500], itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2d8a57'},{offset:1,color:'#5cc48e'}]), borderRadius:[6,6,0,0]}, yAxisIndex:1, animationDuration:2000 }
+                ]
+            });
+            charts.push(c9);
+
+            const c10 = echarts.init(document.getElementById('volatility'));
+            c10.setOption({
+                backgroundColor:'transparent',
+                tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:13}, padding:[10,14], borderRadius:8, borderColor:'transparent', borderWidth:1 },
+                grid: { left:'4%', right:'4%', bottom:'6%', top:'10%', containLabel:true },
+                xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:12}, axisTick:{show:false} },
+                yAxis: { type:'value', name:'增速（%）', nameTextStyle:{color:'#4a6a58',fontSize:11}, axisLine:{show:false}, axisLabel:{color:'#4a6a58'}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}} },
+                series: [{
+                    name:'同比增速', type:'bar', data:[0,0.45,11.36,0.70,1.95,-4.13,3.75,-2.43,1.44,0.53],
+                    itemStyle:{
+                        color:p=>p.value>=0 ? new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2d8a57'},{offset:1,color:'#5cc48e'}]) : new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#c0392b'},{offset:1,color:'#e74c3c'}]),
+                        borderRadius:[6,6,0,0]
+                    },
+                    animationDuration:2000
+                }]
+            });
+            charts.push(c10);
+
+            const yearData = [
+                {year:'2016', production:5946.6, yield:383.2, area:10286, highStandard:6320},
+                {year:'2017', production:5973.4, yield:392.8, area:10136, highStandard:6910},
+                {year:'2018', production:6648.9, yield:395.2, area:10906, highStandard:5957},
+                {year:'2019', production:6695.4, yield:415.8, area:10735, highStandard:7000},
+                {year:'2020', production:6825.8, yield:418.0, area:10739, highStandard:6830},
+                {year:'2021', production:6544.2, yield:405.0, area:10772, highStandard:7580},
+                {year:'2022', production:6789.4, yield:419.9, area:10778, highStandard:8330},
+                {year:'2023', production:6624.3, yield:409.5, area:10785, highStandard:8585},
+                {year:'2024', production:6719.4, yield:415.7, area:10777, highStandard:8808},
+                {year:'2025', production:6754.9, yield:418.5, area:10773, highStandard:8808}
+            ];
+
+            yearData.forEach((item, index) => {
+                const chart = echarts.init(document.getElementById('yearChart' + index));
+                chart.setOption({
+                    backgroundColor:'transparent',
+                    tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:12}, padding:[8,12], borderRadius:6, borderColor:'transparent', borderWidth:1 },
+                    grid: { left:'4%', right:'4%', bottom:'6%', top:'10%', containLabel:true },
+                    xAxis: { type:'category', data:['粮食总产','单产','播种面积','高标准农田'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:11}, axisTick:{show:false} },
+                    yAxis: { type:'value', axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}} },
+                    series: [{
+                        type:'bar', data:[item.production/60, item.yield, item.area/100, item.highStandard/80],
+                        itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#2d8a57'},{offset:1,color:'#5cc48e'}]), borderRadius:[4,4,0,0]}
+                    }]
+                });
+                charts.push(chart);
+            });
+
+            const cityData = [
+                {name:'郑州', data:[185.2,192.6,198.5,195.2,193.5,190.8,190.8,190.8,190.8,187.74]},
+                {name:'开封', data:[195.2,202.5,208.8,215.2,212.1,212.1,212.1,212.1,212.1,212.05]},
+                {name:'洛阳', data:[205.6,212.8,220.5,226.8,230.3,230.3,230.3,230.3,230.3,230.25]},
+                {name:'平顶山', data:[172.5,178.6,182.8,187.7,187.7,187.7,187.7,187.7,187.7,187.74]},
+                {name:'安阳', data:[278.6,285.4,295.8,302.1,308.5,306.3,306.3,306.3,306.3,306.28]},
+                {name:'鹤壁', data:[70.5,72.8,75.5,75.5,75.5,75.5,75.5,75.5,75.5,75.45]},
+                {name:'新乡', data:[185.2,192.6,198.5,195.2,193.5,190.8,190.8,190.8,190.8,190.80]},
+                {name:'焦作', data:[142.5,148.8,152.5,151.8,151.8,151.8,151.8,151.8,151.8,151.80]},
+                {name:'濮阳', data:[265.2,272.8,280.5,288.9,295.6,294.9,294.9,294.9,294.9,294.90]},
+                {name:'许昌', data:[228.5,235.6,242.8,248.9,249.6,249.6,249.6,249.6,249.6,249.60]},
+                {name:'漯河', data:[118.5,122.8,127.6,127.6,127.6,127.6,127.6,127.6,127.6,127.56]},
+                {name:'三门峡', data:[85.2,88.5,91.7,91.7,91.7,91.7,91.7,91.7,91.7,91.65]},
+                {name:'南阳', data:[710.6,719.7,713.3,715.5,694.2,668.0,668.0,668.0,668.0,668.01]},
+                {name:'商丘', data:[730.9,741.9,705.8,740.5,717.6,714.5,714.5,714.5,714.5,714.5]},
+                {name:'信阳', data:[570,575,577.3,581.5,581.8,582.8,582.8,582.8,582.8,582.84]},
+                {name:'周口', data:[805.8,808.5,901.9,912.5,934.3,923.7,932.4,902.6,918.5,918.5]},
+                {name:'驻马店', data:[780,790,800,805.7,811.9,782.8,807.0,807.0,807.0,807.0]},
+                {name:'济源', data:[23.5,24.2,25.1,25.1,25.1,25.1,25.1,25.1,25.1,25.09]}
+            ];
+
+            const cityTrack = document.getElementById('cityTrack');
+            cityData.forEach((city, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `<div class="carousel-card"><div class="carousel-card-title">${city.name}市</div><div id="cityChart${index}" style="height: 280px;"></div></div>`;
+                cityTrack.appendChild(slide);
+            });
+
+            cityData.forEach((city, index) => {
+                const chart = echarts.init(document.getElementById('cityChart' + index));
+                const minVal = Math.min(...city.data) * 0.9;
+                const maxVal = Math.max(...city.data) * 1.1;
+                const range = maxVal - minVal;
+                const interval = Math.ceil(range / 4 / 10) * 10;
+                chart.setOption({
+                    backgroundColor:'transparent',
+                    tooltip: { trigger:'axis', backgroundColor:'rgba(27,67,50,0.95)', textStyle:{color:'#fff',fontSize:12}, padding:[8,12], borderRadius:6, borderColor:'transparent', borderWidth:1 },
+                    grid: { left:'6%', right:'6%', bottom:'8%', top:'12%', containLabel:true },
+                    xAxis: { type:'category', data:['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'], axisLine:{lineStyle:{color:'rgba(27,122,66,0.3)'}}, axisLabel:{color:'#4a6a58',fontSize:10}, axisTick:{show:false} },
+                    yAxis: { type:'value', name:'产量（万吨）', nameTextStyle:{color:'#4a6a58',fontSize:10}, axisLine:{show:false}, axisLabel:{color:'#4a6a58',formatter:function(v){return Math.round(v)}}, splitLine:{lineStyle:{color:'rgba(27,122,66,0.1)',type:'dashed'}}, min:minVal, max:maxVal, interval:interval },
+                    series: [{
+                        name:'粮食产量', type:'line', smooth:false, data:city.data,
+                        lineStyle:{width:3,color:'#2d8a57'}, itemStyle:{color:'#2d8a57',borderWidth:2,borderColor:'#fff'},
+                        areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(45,138,87,0.25)'},{offset:1,color:'rgba(45,138,87,0.02)'}])},
+                        animationDuration:1500, symbolSize:6
+                    }]
+                });
+                charts.push(chart);
+            });
+
+            window.addEventListener('resize', () => charts.forEach(c => c.resize()));
+            return charts;
+        }
+
+        function initCarousel() {
+            const wrapper = document.getElementById('yearCarousel');
+            const track = document.getElementById('yearTrack');
+            const prevBtn = document.getElementById('carouselPrev');
+            const nextBtn = document.getElementById('carouselNext');
+            const indicators = document.getElementById('carouselIndicators');
+            const slides = track.querySelectorAll('.carousel-slide');
+            const slideCount = slides.length;
+            let currentIndex = 0;
+            let isAnimating = false;
+
+            slides.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.className = index === 0 ? 'indicator active' : 'indicator';
+                dot.addEventListener('click', () => goToSlide(index));
+                indicators.appendChild(dot);
+            });
+
+            function goToSlide(index) {
+                if (isAnimating || index === currentIndex) return;
+                isAnimating = true;
+                currentIndex = index;
+                const slideWidth = slides[0].offsetWidth;
+                const style = window.getComputedStyle(slides[0]);
+                const marginLeft = parseFloat(style.marginLeft) || 0;
+                const marginRight = parseFloat(style.marginRight) || 0;
+                const totalGap = marginLeft + marginRight;
+                track.style.transform = `translateX(-${(slideWidth + totalGap) * index}px)`;
+
+                document.querySelectorAll('.indicator').forEach((dot, i) => {
+                    dot.className = i === index ? 'indicator active' : 'indicator';
+                });
+
+                setTimeout(() => isAnimating = false, 500);
+            }
+
+            prevBtn.addEventListener('click', () => goToSlide(currentIndex > 0 ? currentIndex - 1 : slideCount - 1));
+            nextBtn.addEventListener('click', () => goToSlide(currentIndex < slideCount - 1 ? currentIndex + 1 : 0));
+        }
+
+        function initCityCarousel() {
+            const wrapper = document.getElementById('cityCarousel');
+            const track = document.getElementById('cityTrack');
+            const prevBtn = document.getElementById('cityCarouselPrev');
+            const nextBtn = document.getElementById('cityCarouselNext');
+            const indicators = document.getElementById('cityCarouselIndicators');
+            const slides = track.querySelectorAll('.carousel-slide');
+            const slideCount = slides.length;
+            let currentIndex = 0;
+            let isAnimating = false;
+
+            slides.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.className = index === 0 ? 'indicator active' : 'indicator';
+                dot.addEventListener('click', () => goToSlide(index));
+                indicators.appendChild(dot);
+            });
+
+            function goToSlide(index) {
+                if (isAnimating || index === currentIndex) return;
+                isAnimating = true;
+                currentIndex = index;
+                const slideWidth = slides[0].offsetWidth;
+                const style = window.getComputedStyle(slides[0]);
+                const marginLeft = parseFloat(style.marginLeft) || 0;
+                const marginRight = parseFloat(style.marginRight) || 0;
+                const totalGap = marginLeft + marginRight;
+                track.style.transform = `translateX(-${(slideWidth + totalGap) * index}px)`;
+
+                document.querySelectorAll('#cityCarouselIndicators .indicator').forEach((dot, i) => {
+                    dot.className = i === index ? 'indicator active' : 'indicator';
+                });
+
+                setTimeout(() => isAnimating = false, 500);
+            }
+
+            window.goToCitySlide = goToSlide;
+
+            prevBtn.addEventListener('click', () => goToSlide(currentIndex > 0 ? currentIndex - 1 : slideCount - 1));
+            nextBtn.addEventListener('click', () => goToSlide(currentIndex < slideCount - 1 ? currentIndex + 1 : 0));
+        }
+
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-value');
+            const targets = [808.27, 35.3, 487.1, 2488];
+
+            counters.forEach((counter, index) => {
+                const target = targets[index];
+                const decimals = target >= 1000 ? 0 : target >= 100 ? 1 : 2;
+                let current = 0;
+                const duration = 2500;
+                const startTime = performance.now();
+
+                const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
+                const animate = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const easedProgress = easeOutCubic(progress);
+                    current = target * easedProgress;
+                    counter.textContent = '+' + current.toFixed(decimals);
+
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    }
+                };
+
+                requestAnimationFrame(animate);
+            });
+        }
+
+        function initInteractiveMap() {
+            const svg = document.getElementById('henanMap');
+            const tooltip = document.getElementById('mapTooltip');
+            const mapWrap = document.querySelector('.interactive-map');
+
+            const cityData = {
+                'PUYANG':      { name:'濮阳', production:294.90, growth:'+11.2%', rank:7, offsetX: -25, offsetY: 15 },
+                'XINXIANG':    { name:'新乡', production:190.80, growth:'+3.0%',  rank:12, offsetX: 0, offsetY: 30 },
+                'JIAOZUO':     { name:'焦作', production:151.80, growth:'+6.5%',  rank:13, offsetY: 10 },
+                'JIYUAN':      { name:'济源', production:25.09,  growth:'+6.8%',  rank:18 },
+                'KAIFENG':     { name:'开封', production:212.05, growth:'+8.7%',  rank:10 },
+                'SHANGQIU':    { name:'商丘', production:714.47, growth:'-2.2%',  rank:3 },
+                'SANMENXIA':   { name:'三门峡',production:91.65, growth:'+7.6%',  rank:16, offsetX: -33, offsetY: 8 },
+                'LUOHE':       { name:'漯河', production:127.56, growth:'+7.7%',  rank:14, offsetX: 0, offsetY: 14 },
+                'ZHUMADIAN':   { name:'驻马店',production:807.00, growth:'+3.5%',  rank:2 },
+                'XINYANG':     { name:'信阳', production:582.84, growth:'+2.2%',  rank:5 },
+                'NANYANG':     { name:'南阳', production:668.01, growth:'-5.9%',  rank:4 },
+                'ZHENGZHOU':   { name:'郑州', production:187.74, growth:'+5.2%',  rank:6 },
+                'ANYANG':      { name:'安阳', production:306.28, growth:'+9.9%',  rank:6, offsetX: 8, offsetY: 15 },
+                'HEBI':        { name:'鹤壁', production:75.45,  growth:'+7.0%',  rank:15,offsetX: 10,offsetY: -30 },
+                'LUOYANG':     { name:'洛阳', production:230.25, growth:'+12.0%', rank:8 },
+                'PINGDINGSHAN':{ name:'平顶山',production:187.74, growth:'+9.0%',  rank:5 },
+                'XUCHANG':     { name:'许昌', production:249.60, growth:'+9.2%',  rank:9 },
+                'ZHOUKOU':     { name:'周口', production:918.49, growth:'+13.9%', rank:1 }
+            };
+
+            const paths = svg.querySelectorAll('path.map-city');
+            const ns = 'http://www.w3.org/2000/svg';
+
+            paths.forEach(path => {
+                const id = path.getAttribute('id');
+                const city = cityData[id];
+                if (!city) return;
+
+                // 悬停：tooltip + 加粗描边
+                path.addEventListener('mouseenter', function(e) {
+                    this.style.strokeWidth = '3';
+                    this.style.stroke = '#1b7a42';
+                    tooltip.innerHTML = '<h4>' + city.name + '</h4>'
+                        + '<p><span class="highlight">粮食产量：' + city.production + '万吨</span></p>'
+                        + '<p>十年增长：' + city.growth + '</p>'
+                        + '<p>全省排名：第' + city.rank + '位</p>';
+                    tooltip.classList.add('show');
+                });
+
+                path.addEventListener('mousemove', function(e) {
+                    const wrapRect = mapWrap.getBoundingClientRect();
+                    tooltip.style.left = (e.clientX - wrapRect.left + 16) + 'px';
+                    tooltip.style.top = (e.clientY - wrapRect.top - 16) + 'px';
+                });
+
+                path.addEventListener('mouseleave', function() {
+                    this.style.strokeWidth = '';
+                    this.style.stroke = '';
+                    tooltip.classList.remove('show');
+                });
+
+                // 点击：滚动到各地市十年产能变化区域并显示对应城市折线图
+                path.addEventListener('click', function() {
+                    const cityNames = ['郑州', '开封', '洛阳', '平顶山', '安阳', '鹤壁', '新乡', '焦作', '濮阳', '许昌', '漯河', '三门峡', '南阳', '商丘', '信阳', '周口', '驻马店', '济源'];
+                    const cityName = city.name.replace('市', '');
+                    const cityIndex = cityNames.indexOf(cityName);
+                    if (cityIndex !== -1) {
+                        const carouselSection = document.getElementById('cityCarousel');
+                        carouselSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(() => {
+                            if (window.goToCitySlide) {
+                                window.goToCitySlide(cityIndex);
+                            }
+                        }, 800);
+                    }
+                });
+            });
+        }
+
+        function initAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            document.querySelectorAll('.reveal-text').forEach((el, index) => {
+                gsap.to(el, {
+                    autoAlpha: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 85%',
+                        once: true
+                    }
+                });
+            });
+
+            document.querySelectorAll('.section-title').forEach((el, index) => {
+                gsap.set(el, { opacity: 0, x: -40 });
+                gsap.to(el, {
+                    opacity: 1,
+                    x: 0,
+                    duration: 1,
+                    ease: 'power2.out',
+                    scrollTrigger: {
+                        trigger: el,
+                        start: 'top 80%',
+                        once: true
+                    }
+                });
+            });
+
+            document.querySelectorAll('.stat-card').forEach((card, index) => {
+                gsap.set(card, { opacity: 0, scale: 0.9 });
+                gsap.to(card, {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.6,
+                    ease: 'power2.out',
+                    delay: index * 0.15,
+                    scrollTrigger: {
+                        trigger: card.parentElement,
+                        start: 'top 85%',
+                        once: true
+                    }
+                });
+            });
+
+            const counterSection = document.querySelector('.stats-section');
+            if (counterSection) {
+                ScrollTrigger.create({
+                    trigger: counterSection,
+                    start: 'top 85%',
+                    once: true,
+                    onEnter: animateCounters
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            initCarousel();
+            initCityCarousel();
+            initInteractiveMap();
+            initAnimations();
+            setTimeout(animateCounters, 2000);
+        });
+    </script>
